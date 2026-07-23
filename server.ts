@@ -5,7 +5,6 @@
  * different moduleResolution than our local NodeNext config.
  */
 import express from "express";
-// @ts-expect-error — compiled JS emitted by `npm --prefix server run build`
 import { createApp } from "./server/dist/app.js";
 
 void express;
