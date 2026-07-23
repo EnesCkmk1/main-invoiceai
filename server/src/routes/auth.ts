@@ -6,10 +6,15 @@ import { prisma } from "../lib/prisma.js";
 import { signToken } from "../lib/jwt.js";
 import { ApiError, asyncHandler } from "../lib/http.js";
 import { sendMail } from "../lib/mailer.js";
-import { env } from "../config/env.js";
+import { env, isDev } from "../config/env.js";
 import { requireAuth } from "../middleware/auth.js";
 
 const router = Router();
+
+/** One-time tokens are stored hashed so a DB leak can't be replayed as a login. */
+function hashToken(raw: string): string {
+  return crypto.createHash("sha256").update(raw).digest("hex");
+}
 
 function publicUser(user: { id: string; email: string; name: string; avatarUrl: string | null; companyId: string | null }) {
   return { id: user.id, email: user.email, name: user.name, avatarUrl: user.avatarUrl, companyId: user.companyId };
@@ -23,10 +28,13 @@ async function bootstrapCompany(name: string) {
   });
 }
 
+// bcrypt only uses the first 72 bytes of input, so cap the length explicitly.
+const passwordSchema = z.string().min(8).max(72);
+
 const registerSchema = z.object({
-  name: z.string().min(1),
+  name: z.string().min(1).max(120),
   email: z.string().email(),
-  password: z.string().min(8),
+  password: passwordSchema,
 });
 
 router.post(
@@ -84,7 +92,7 @@ router.post(
     const rawToken = crypto.randomBytes(32).toString("hex");
     const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
     await prisma.authToken.create({
-      data: { userId: user.id, type: "MAGIC_LINK", token: rawToken, expiresAt },
+      data: { userId: user.id, type: "MAGIC_LINK", token: hashToken(rawToken), expiresAt },
     });
     const link = `${env.appUrl}/auth/magic?token=${rawToken}`;
     const { delivered } = await sendMail({
@@ -92,7 +100,7 @@ router.post(
       subject: "Your InvoiceFlow login link",
       html: `<p>Click to sign in to InvoiceFlow AI:</p><p><a href="${link}">Sign in</a></p><p>This link expires in 15 minutes.</p>`,
     });
-    res.json({ ok: true, delivered, ...(env.nodeEnv !== "production" ? { devLink: link } : {}) });
+    res.json({ ok: true, delivered, ...(isDev ? { devLink: link } : {}) });
   })
 );
 
@@ -102,7 +110,7 @@ router.post(
   "/magic-link/verify",
   asyncHandler(async (req, res) => {
     const { token } = magicVerifySchema.parse(req.body);
-    const record = await prisma.authToken.findUnique({ where: { token }, include: { user: true } });
+    const record = await prisma.authToken.findUnique({ where: { token: hashToken(token) }, include: { user: true } });
     if (!record || record.type !== "MAGIC_LINK" || record.usedAt || record.expiresAt < new Date()) {
       throw new ApiError(400, "Invalid or expired link");
     }
@@ -120,11 +128,15 @@ router.post(
   "/google",
   asyncHandler(async (req, res) => {
     const { credential } = googleSchema.parse(req.body);
+    // Without a configured client ID we cannot verify the token audience, and
+    // accepting arbitrary Google-issued tokens would let any third-party app's
+    // token sign users in. Refuse instead of verifying loosely.
+    if (!env.googleClientId) throw new ApiError(503, "Google login is not configured");
     // Verify the Google ID token via Google's tokeninfo endpoint.
-    const resp = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${credential}`);
+    const resp = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(credential)}`);
     if (!resp.ok) throw new ApiError(401, "Invalid Google credential");
     const info = (await resp.json()) as { sub: string; email: string; name?: string; picture?: string; aud?: string };
-    if (env.googleClientId && info.aud !== env.googleClientId) {
+    if (info.aud !== env.googleClientId) {
       throw new ApiError(401, "Google credential audience mismatch");
     }
     let user = await prisma.user.findFirst({ where: { OR: [{ googleId: info.sub }, { email: info.email.toLowerCase() }] } });
@@ -160,26 +172,26 @@ router.post(
     if (user) {
       const rawToken = crypto.randomBytes(32).toString("hex");
       const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
-      await prisma.authToken.create({ data: { userId: user.id, type: "PASSWORD_RESET", token: rawToken, expiresAt } });
+      await prisma.authToken.create({ data: { userId: user.id, type: "PASSWORD_RESET", token: hashToken(rawToken), expiresAt } });
       const link = `${env.appUrl}/auth/reset?token=${rawToken}`;
       await sendMail({
         to: user.email,
         subject: "Reset your InvoiceFlow password",
         html: `<p>Reset your password:</p><p><a href="${link}">Choose a new password</a></p><p>This link expires in 1 hour.</p>`,
       });
-      if (env.nodeEnv !== "production") return res.json({ ok: true, devLink: link });
+      if (isDev) return res.json({ ok: true, devLink: link });
     }
     res.json({ ok: true });
   })
 );
 
-const resetSchema = z.object({ token: z.string(), password: z.string().min(8) });
+const resetSchema = z.object({ token: z.string(), password: passwordSchema });
 
 router.post(
   "/reset-password",
   asyncHandler(async (req, res) => {
     const { token, password } = resetSchema.parse(req.body);
-    const record = await prisma.authToken.findUnique({ where: { token }, include: { user: true } });
+    const record = await prisma.authToken.findUnique({ where: { token: hashToken(token) }, include: { user: true } });
     if (!record || record.type !== "PASSWORD_RESET" || record.usedAt || record.expiresAt < new Date()) {
       throw new ApiError(400, "Invalid or expired reset link");
     }

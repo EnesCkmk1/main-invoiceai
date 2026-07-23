@@ -112,6 +112,29 @@ Backend (`server/`): `dev`, `build`, `start`, `typecheck`, `prisma:migrate`,
 `prisma:deploy`, `db:seed`.
 Frontend (`client/`): `dev`, `build`, `preview`, `typecheck`.
 
+## 🔐 Security
+
+- **Dependencies:** all runtime packages are CVE-free (verified against the npm
+  advisory DB and OSV.dev) with permissive licenses only (MIT/ISC/BSD/Apache-2.0).
+  CI fails the build on any new high/critical advisory.
+- **Headers & limits:** `helmet` security headers, JSON body capped at 1 MB,
+  `x-powered-by` disabled.
+- **Rate limiting:** global API limiter plus strict limits on login/register/
+  magic-link/reset (brute-force protection) and AI endpoints.
+- **Auth hardening:** production refuses to boot without a strong `JWT_SECRET`;
+  magic-link and password-reset tokens are stored **hashed (SHA-256)** and are
+  single-use with short expiry; passwords are bcrypt-hashed (length-capped at
+  bcrypt's 72-byte input limit); Google login is disabled unless a
+  `GOOGLE_CLIENT_ID` is configured (token audience is always verified).
+- **Payments:** the demo "simulate payment" endpoint is hard-disabled in
+  production; Stripe webhooks are signature-verified against the raw body.
+- **Enumeration:** forgot-password always responds identically; login errors
+  don't reveal whether the email exists.
+
+Known trade-offs (documented deliberately): the JWT is kept in `localStorage`
+(simple, but relies on XSS protection — consider httpOnly cookies + CSRF tokens
+before launch), and magic-link sign-in auto-creates accounts by design.
+
 ## 📌 Notes
 
 Deployment is intentionally not configured yet.

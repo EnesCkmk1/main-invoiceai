@@ -5,7 +5,7 @@ import { ApiError, asyncHandler } from "../lib/http.js";
 import { renderInvoicePdf } from "../services/pdf.js";
 import { toPdfData } from "../services/invoiceService.js";
 import { stripe } from "../lib/stripe.js";
-import { env, hasStripe } from "../config/env.js";
+import { env, hasStripe, isProd } from "../config/env.js";
 
 const router = Router();
 
@@ -109,12 +109,13 @@ router.post(
   })
 );
 
-// Simulate payment (dev/testing without Stripe)
+// Simulate payment (dev/testing without Stripe). Never available in
+// production — otherwise anyone with the link could mark an invoice paid.
 const simulateSchema = z.object({ method: z.string().optional() });
 router.post(
   "/invoice/:token/simulate-pay",
   asyncHandler(async (req, res) => {
-    if (env.nodeEnv === "production" && hasStripe) throw new ApiError(403, "Not available");
+    if (isProd) throw new ApiError(403, "Not available");
     const { method } = simulateSchema.parse(req.body);
     const invoice = await loadByToken(req.params.token);
     if (!invoice) throw new ApiError(404, "Invoice not found");

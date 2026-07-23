@@ -36,6 +36,17 @@ export const env = {
 };
 
 export const isProd = env.nodeEnv === "production";
+export const isDev = env.nodeEnv === "development";
 export const hasOpenAi = Boolean(env.openaiApiKey);
 export const hasStripe = Boolean(env.stripeSecretKey);
 export const hasSmtp = Boolean(env.smtpHost && env.smtpUser);
+
+// Fail fast in production rather than running with an insecure signing key.
+if (isProd) {
+  if (!process.env.JWT_SECRET || env.jwtSecret.length < 32) {
+    throw new Error("JWT_SECRET must be set to a random value of at least 32 characters in production.");
+  }
+  if (!env.databaseUrl) {
+    throw new Error("DATABASE_URL must be set in production.");
+  }
+}
