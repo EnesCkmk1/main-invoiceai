@@ -1,0 +1,41 @@
+import dotenv from "dotenv";
+
+dotenv.config();
+
+function optional(key: string, fallback = ""): string {
+  return process.env[key] ?? fallback;
+}
+
+export const env = {
+  nodeEnv: optional("NODE_ENV", "development"),
+  port: parseInt(optional("PORT", "4000"), 10),
+  databaseUrl: optional("DATABASE_URL"),
+  jwtSecret: optional("JWT_SECRET", "dev-insecure-secret-change-me"),
+  jwtExpiresIn: optional("JWT_EXPIRES_IN", "7d"),
+  appUrl: optional("APP_URL", "http://localhost:5173"),
+  apiUrl: optional("API_URL", "http://localhost:4000"),
+
+  // Email (nodemailer). If SMTP is not configured we log to console.
+  smtpHost: optional("SMTP_HOST"),
+  smtpPort: parseInt(optional("SMTP_PORT", "587"), 10),
+  smtpUser: optional("SMTP_USER"),
+  smtpPass: optional("SMTP_PASS"),
+  mailFrom: optional("MAIL_FROM", "InvoiceFlow AI <no-reply@invoiceflow.ai>"),
+
+  // Google OAuth
+  googleClientId: optional("GOOGLE_CLIENT_ID"),
+
+  // Stripe
+  stripeSecretKey: optional("STRIPE_SECRET_KEY"),
+  stripeWebhookSecret: optional("STRIPE_WEBHOOK_SECRET"),
+  stripePriceId: optional("STRIPE_PRICE_ID"),
+
+  // OpenAI (optional — AI works without it via the rule-based parser)
+  openaiApiKey: optional("OPENAI_API_KEY"),
+  openaiModel: optional("OPENAI_MODEL", "gpt-4o-mini"),
+};
+
+export const isProd = env.nodeEnv === "production";
+export const hasOpenAi = Boolean(env.openaiApiKey);
+export const hasStripe = Boolean(env.stripeSecretKey);
+export const hasSmtp = Boolean(env.smtpHost && env.smtpUser);
