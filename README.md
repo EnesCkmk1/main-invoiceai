@@ -11,6 +11,14 @@ into a complete invoice.
 Everything works **without AI** — the AI is an assistant that makes you dramatically
 faster, never a requirement.
 
+## 🚀 Live
+
+**Production:** [https://invoiceflow-ai-eosin.vercel.app](https://invoiceflow-ai-eosin.vercel.app)
+
+Demo login: `demo@invoiceflow.ai` / `password123`
+
+Hosted on Vercel (Express + Vite SPA, same origin) with Neon Postgres.
+
 ---
 
 ## ✨ Highlights
