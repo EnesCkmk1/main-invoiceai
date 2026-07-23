@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/node";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import fs from "node:fs";
@@ -18,6 +19,16 @@ import aiRoutes from "./routes/ai.js";
 import analyticsRoutes from "./routes/analytics.js";
 import publicRoutes from "./routes/public.js";
 import billingRoutes from "./routes/billing.js";
+import cronRoutes from "./routes/cron.js";
+import waitlistRoutes from "./routes/waitlist.js";
+
+if (env.sentryDsn) {
+  Sentry.init({
+    dsn: env.sentryDsn,
+    environment: env.nodeEnv,
+    tracesSampleRate: isProd ? 0.1 : 1.0,
+  });
+}
 
 export function createApp() {
   const app = express();
@@ -96,6 +107,8 @@ export function createApp() {
   app.use("/api/analytics", analyticsRoutes);
   app.use("/api/public", publicRoutes);
   app.use("/api/billing", billingRoutes);
+  app.use("/api/cron", cronRoutes);
+  app.use("/api/waitlist", waitlistRoutes);
 
   app.use("/api", notFound);
 

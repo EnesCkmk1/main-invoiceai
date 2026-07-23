@@ -33,6 +33,8 @@ const companySchema = z.object({
   emailBodyTemplate: z.string().nullable().optional(),
   invoiceNotes: z.string().nullable().optional(),
   signature: z.string().nullable().optional(),
+  onboardingCompleted: z.boolean().optional(),
+  locale: z.enum(["da", "en"]).optional(),
 });
 
 router.get(

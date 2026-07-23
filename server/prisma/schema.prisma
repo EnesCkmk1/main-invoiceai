@@ -91,12 +91,15 @@ model Company {
   emailBodyTemplate    String?
   invoiceNotes     String?
   signature        String?
+  locale           String   @default("da")
 
   // Billing (the company's own InvoiceFlow subscription)
   stripeCustomerId     String?
   stripeSubscriptionId String?
   subscriptionStatus   String  @default("trialing")
   trialEndsAt          DateTime?
+
+  onboardingCompleted  Boolean  @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -240,4 +243,11 @@ model AuthToken {
   createdAt DateTime  @default(now())
 
   @@index([userId])
+}
+
+model WaitlistEntry {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  source    String   @default("landing")
+  createdAt DateTime @default(now())
 }

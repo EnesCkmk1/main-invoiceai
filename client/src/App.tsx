@@ -1,9 +1,12 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { useAuth } from "./lib/auth";
+import { needsOnboarding } from "./lib/onboarding";
 import { FullPageSpinner } from "./components/ui";
 import { AppLayout } from "./layouts/AppLayout";
 
 import LandingPage from "./pages/LandingPage";
+import PrivacyPage from "./pages/PrivacyPage";
+import TermsPage from "./pages/TermsPage";
 import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
 import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
@@ -17,6 +20,7 @@ import InvoiceEditorPage from "./pages/app/InvoiceEditorPage";
 import InvoiceDetailPage from "./pages/app/InvoiceDetailPage";
 import AnalyticsPage from "./pages/app/AnalyticsPage";
 import SettingsPage from "./pages/app/SettingsPage";
+import OnboardingPage from "./pages/app/OnboardingPage";
 import PublicInvoicePage from "./pages/PublicInvoicePage";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -26,10 +30,24 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
-function PublicOnlyRoute({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth();
+function OnboardingGate({ children }: { children: React.ReactNode }) {
+  const { company, loading } = useAuth();
   if (loading) return <FullPageSpinner />;
-  if (user) return <Navigate to="/app" replace />;
+  if (needsOnboarding(company)) return <Navigate to="/app/onboarding" replace />;
+  return <>{children}</>;
+}
+
+function OnboardingOnlyRoute({ children }: { children: React.ReactNode }) {
+  const { company, loading } = useAuth();
+  if (loading) return <FullPageSpinner />;
+  if (!needsOnboarding(company)) return <Navigate to="/app" replace />;
+  return <>{children}</>;
+}
+
+function PublicOnlyRoute({ children }: { children: React.ReactNode }) {
+  const { user, company, loading } = useAuth();
+  if (loading) return <FullPageSpinner />;
+  if (user) return <Navigate to={needsOnboarding(company) ? "/app/onboarding" : "/app"} replace />;
   return <>{children}</>;
 }
 
@@ -37,6 +55,8 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
+      <Route path="/privacy" element={<PrivacyPage />} />
+      <Route path="/terms" element={<TermsPage />} />
       <Route path="/pay/:token" element={<PublicInvoicePage />} />
 
       <Route path="/login" element={<PublicOnlyRoute><LoginPage /></PublicOnlyRoute>} />
@@ -46,10 +66,23 @@ export default function App() {
       <Route path="/auth/magic" element={<MagicLinkPage />} />
 
       <Route
+        path="/app/onboarding"
+        element={
+          <ProtectedRoute>
+            <OnboardingOnlyRoute>
+              <OnboardingPage />
+            </OnboardingOnlyRoute>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
         path="/app"
         element={
           <ProtectedRoute>
-            <AppLayout />
+            <OnboardingGate>
+              <AppLayout />
+            </OnboardingGate>
           </ProtectedRoute>
         }
       >

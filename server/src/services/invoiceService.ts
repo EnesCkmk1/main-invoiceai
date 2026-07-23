@@ -75,6 +75,7 @@ export function toPdfData(invoice: any, company: any, payUrl?: string | null): I
     notes: invoice.notes,
     footer: invoice.footer,
     payUrl,
+    locale: company?.locale ?? "da",
   };
 }
 

@@ -1,4 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
+import * as Sentry from "@sentry/node";
+import { env } from "../config/env.js";
 
 export class ApiError extends Error {
   status: number;
@@ -34,5 +36,8 @@ export function errorHandler(
     return res.status(400).json({ error: "Validation failed", details: (err as any).issues });
   }
   console.error("[error]", err);
+  if (env.sentryDsn && err instanceof Error) {
+    Sentry.captureException(err);
+  }
   return res.status(500).json({ error: "Internal server error" });
 }

@@ -5,5 +5,11 @@
   "buildCommand": "npm --prefix server run prisma:generate && npm --prefix server run build && npm --prefix client run build && rm -rf public && mkdir -p public && cp -r client/dist/* public/",
   "rewrites": [
     { "source": "/((?!api/).*)", "destination": "/index.html" }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron/reminders",
+      "schedule": "0 7 * * *"
+    }
   ]
 }

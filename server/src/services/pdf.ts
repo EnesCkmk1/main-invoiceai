@@ -1,5 +1,6 @@
 import PDFDocument from "pdfkit";
 import QRCode from "qrcode";
+import { dateLocaleTag, pdfLabels, resolveLocale } from "../lib/i18n.js";
 
 interface PdfItem {
   description: string;
@@ -16,6 +17,7 @@ export interface InvoicePdfData {
   issueDate: Date;
   dueDate: Date;
   currency: string;
+  locale?: string | null;
   company: {
     name: string;
     vatNumber?: string | null;
@@ -50,16 +52,19 @@ export interface InvoicePdfData {
   payUrl?: string | null;
 }
 
-function money(n: number, currency: string): string {
-  return `${n.toLocaleString("da-DK", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ${currency}`;
+function money(n: number, currency: string, locale: string): string {
+  return `${n.toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ${currency}`;
 }
 
-function formatDate(d: Date): string {
-  return d.toLocaleDateString("da-DK", { year: "numeric", month: "short", day: "numeric" });
+function formatDate(d: Date, locale: string): string {
+  return d.toLocaleDateString(locale, { year: "numeric", month: "short", day: "numeric" });
 }
 
 /** Renders the invoice to a PDF and resolves with the resulting Buffer. */
 export async function renderInvoicePdf(data: InvoicePdfData): Promise<Buffer> {
+  const locale = resolveLocale(data.locale);
+  const tag = dateLocaleTag(locale);
+  const L = pdfLabels(locale);
   const brand = data.company.brandColor || "#4f46e5";
   const muted = "#6b7280";
   const dark = "#111827";
@@ -83,7 +88,7 @@ export async function renderInvoicePdf(data: InvoicePdfData): Promise<Buffer> {
     const pageWidth = doc.page.width;
     const left = 50;
     const right = pageWidth - 50;
-    const title = data.type === "CREDIT_NOTE" ? "CREDIT NOTE" : "INVOICE";
+    const title = data.type === "CREDIT_NOTE" ? L.creditNote : L.invoice;
 
     // Header
     doc.fillColor(brand).fontSize(26).font("Helvetica-Bold").text(data.company.name, left, 50);
@@ -96,7 +101,7 @@ export async function renderInvoicePdf(data: InvoicePdfData): Promise<Buffer> {
           data.company.address,
           [data.company.zip, data.company.city].filter(Boolean).join(" "),
           data.company.country,
-          data.company.vatNumber ? `VAT/CVR: ${data.company.vatNumber}` : null,
+          data.company.vatNumber ? `${L.vatCvr}: ${data.company.vatNumber}` : null,
           data.company.email,
           data.company.phone,
         ]
@@ -111,13 +116,13 @@ export async function renderInvoicePdf(data: InvoicePdfData): Promise<Buffer> {
       .fillColor(muted)
       .fontSize(10)
       .font("Helvetica")
-      .text(`No. ${data.number}`, right - 200, 84, { width: 200, align: "right" })
-      .text(`Issued: ${formatDate(data.issueDate)}`, { width: 200, align: "right" })
-      .text(`Due: ${formatDate(data.dueDate)}`, { width: 200, align: "right" });
+      .text(`${L.number} ${data.number}`, right - 200, 84, { width: 200, align: "right" })
+      .text(`${L.issued}: ${formatDate(data.issueDate, tag)}`, { width: 200, align: "right" })
+      .text(`${L.due}: ${formatDate(data.dueDate, tag)}`, { width: 200, align: "right" });
 
     // Bill to
     let y = 170;
-    doc.fillColor(muted).fontSize(9).font("Helvetica-Bold").text("BILL TO", left, y);
+    doc.fillColor(muted).fontSize(9).font("Helvetica-Bold").text(L.billTo, left, y);
     y += 14;
     doc.fillColor(dark).fontSize(11).font("Helvetica-Bold").text(data.customer.name || "—", left, y);
     y += 15;
@@ -127,7 +132,7 @@ export async function renderInvoicePdf(data: InvoicePdfData): Promise<Buffer> {
       y += doc.heightOfString(data.customer.address, { width: 250 });
     }
     if (data.customer.vat) {
-      doc.text(`VAT/CVR: ${data.customer.vat}`, left, y);
+      doc.text(`${L.vatCvr}: ${data.customer.vat}`, left, y);
       y += 12;
     }
     if (data.customer.email) {
@@ -145,11 +150,11 @@ export async function renderInvoicePdf(data: InvoicePdfData): Promise<Buffer> {
 
     doc.rect(left, tableTop - 6, right - left, 22).fill(brand);
     doc.fillColor("#ffffff").fontSize(9).font("Helvetica-Bold");
-    doc.text("DESCRIPTION", colDesc + 6, tableTop);
-    doc.text("QTY", colQty, tableTop, { width: 50, align: "right" });
-    doc.text("PRICE", colPrice, tableTop, { width: 70, align: "right" });
-    doc.text("VAT", colVat, tableTop, { width: 40, align: "right" });
-    doc.text("AMOUNT", colTotal, tableTop, { width: right - colTotal - 6, align: "right" });
+    doc.text(L.description, colDesc + 6, tableTop);
+    doc.text(L.qty, colQty, tableTop, { width: 50, align: "right" });
+    doc.text(L.price, colPrice, tableTop, { width: 70, align: "right" });
+    doc.text(L.vat, colVat, tableTop, { width: 40, align: "right" });
+    doc.text(L.amount, colTotal, tableTop, { width: right - colTotal - 6, align: "right" });
 
     let rowY = tableTop + 24;
     doc.font("Helvetica").fontSize(9);
@@ -164,9 +169,9 @@ export async function renderInvoicePdf(data: InvoicePdfData): Promise<Buffer> {
       doc.fillColor(dark).text(item.description, colDesc + 6, rowY, { width: colQty - colDesc - 12 });
       const qtyLabel = item.unit ? `${item.quantity} ${item.unit}` : String(item.quantity);
       doc.fillColor(muted).text(qtyLabel, colQty, rowY, { width: 50, align: "right" });
-      doc.text(money(item.unitPrice, data.currency).replace(` ${data.currency}`, ""), colPrice, rowY, { width: 70, align: "right" });
+      doc.text(money(item.unitPrice, data.currency, tag).replace(` ${data.currency}`, ""), colPrice, rowY, { width: 70, align: "right" });
       doc.text(`${item.vatRate}%`, colVat, rowY, { width: 40, align: "right" });
-      doc.fillColor(dark).text(money(item.lineTotal, data.currency).replace(` ${data.currency}`, ""), colTotal, rowY, {
+      doc.fillColor(dark).text(money(item.lineTotal, data.currency, tag).replace(` ${data.currency}`, ""), colTotal, rowY, {
         width: right - colTotal - 6,
         align: "right",
       });
@@ -184,23 +189,23 @@ export async function renderInvoicePdf(data: InvoicePdfData): Promise<Buffer> {
       doc.fillColor(dark).text(value, valX, ty, { width: right - valX - 6, align: "right" });
       ty += bold ? 22 : 16;
     };
-    totalsLine("Subtotal", money(data.subtotal, data.currency));
-    if (data.discountTotal > 0) totalsLine("Discount", `-${money(data.discountTotal, data.currency)}`);
-    totalsLine("VAT", money(data.vatTotal, data.currency));
+    totalsLine(L.subtotal, money(data.subtotal, data.currency, tag));
+    if (data.discountTotal > 0) totalsLine(L.discount, `-${money(data.discountTotal, data.currency, tag)}`);
+    totalsLine(L.vat, money(data.vatTotal, data.currency, tag));
     doc.moveTo(labelX, ty).lineTo(right, ty).strokeColor("#e5e7eb").stroke();
     ty += 6;
-    totalsLine("Total", money(data.total, data.currency), true);
+    totalsLine(L.total, money(data.total, data.currency, tag), true);
 
     // Payment info + QR
     let py = ty + 24;
-    doc.fillColor(muted).fontSize(9).font("Helvetica-Bold").text("PAYMENT", left, py);
+    doc.fillColor(muted).fontSize(9).font("Helvetica-Bold").text(L.payment, left, py);
     py += 14;
     doc.font("Helvetica").fillColor(dark).fontSize(9);
     const payLines = [
-      data.company.bankName ? `Bank: ${data.company.bankName}` : null,
-      data.company.bankIban ? `IBAN: ${data.company.bankIban}` : null,
-      data.company.bankAccount ? `Account: ${data.company.bankAccount}` : null,
-      data.company.bankSwift ? `SWIFT/BIC: ${data.company.bankSwift}` : null,
+      data.company.bankName ? `${L.bank}: ${data.company.bankName}` : null,
+      data.company.bankIban ? `${L.iban}: ${data.company.bankIban}` : null,
+      data.company.bankAccount ? `${L.account}: ${data.company.bankAccount}` : null,
+      data.company.bankSwift ? `${L.swift}: ${data.company.bankSwift}` : null,
       data.company.paymentInstructions,
     ].filter(Boolean) as string[];
     payLines.forEach((line) => {
@@ -211,13 +216,13 @@ export async function renderInvoicePdf(data: InvoicePdfData): Promise<Buffer> {
     if (qrDataUrl) {
       const img = Buffer.from(qrDataUrl.split(",")[1], "base64");
       doc.image(img, right - 110, ty + 24, { width: 90 });
-      doc.fillColor(muted).fontSize(8).text("Scan to pay", right - 110, ty + 118, { width: 90, align: "center" });
+      doc.fillColor(muted).fontSize(8).text(L.scanToPay, right - 110, ty + 118, { width: 90, align: "center" });
     }
 
     // Notes / footer / signature
     let ny = Math.max(py, ty + 150) + 10;
     if (data.notes) {
-      doc.fillColor(muted).fontSize(9).font("Helvetica-Bold").text("NOTES", left, ny);
+      doc.fillColor(muted).fontSize(9).font("Helvetica-Bold").text(L.notes, left, ny);
       ny += 12;
       doc.font("Helvetica").fillColor(dark).text(data.notes, left, ny, { width: right - left });
       ny += doc.heightOfString(data.notes, { width: right - left }) + 10;
@@ -232,7 +237,7 @@ export async function renderInvoicePdf(data: InvoicePdfData): Promise<Buffer> {
         .fillColor(muted)
         .fontSize(8)
         .font("Helvetica")
-        .text(data.footer || "Thank you for your business.", left, footerY, { width: right - left, align: "center" });
+        .text(data.footer || L.footer, left, footerY, { width: right - left, align: "center" });
     }
 
     doc.end();

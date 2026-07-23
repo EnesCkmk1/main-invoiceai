@@ -33,8 +33,10 @@ export interface Company {
   emailBodyTemplate?: string | null;
   invoiceNotes?: string | null;
   signature?: string | null;
+  locale?: string;
   subscriptionStatus: string;
   trialEndsAt?: string | null;
+  onboardingCompleted: boolean;
 }
 
 export interface Customer {

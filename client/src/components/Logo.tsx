@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export function Logo({ to = "/", compact = false }: { to?: string; compact?: boolean }) {
+export function Logo({ to = "/", compact = false, light = false }: { to?: string; compact?: boolean; light?: boolean }) {
   return (
     <Link to={to} className="flex items-center gap-2 font-extrabold tracking-tight">
       <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-linear-to-br from-brand-500 to-sky-500 text-white shadow-xs">
@@ -9,8 +9,8 @@ export function Logo({ to = "/", compact = false }: { to?: string; compact?: boo
         </svg>
       </span>
       {!compact && (
-        <span className="text-lg text-slate-900 dark:text-white">
-          InvoiceFlow <span className="text-brand-600 dark:text-brand-400">AI</span>
+        <span className={`text-lg ${light ? "text-white" : "text-slate-900 dark:text-white"}`}>
+          InvoiceFlow <span className={light ? "text-brand-100" : "text-brand-600 dark:text-brand-400"}>AI</span>
         </span>
       )}
     </Link>

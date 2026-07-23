@@ -44,6 +44,7 @@ async function main() {
       signature: "Best regards,\nThe Nordic Studio team",
       subscriptionStatus: "trialing",
       trialEndsAt: daysFromNow(14),
+      onboardingCompleted: true,
     },
   });
 

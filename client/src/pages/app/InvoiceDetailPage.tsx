@@ -21,6 +21,7 @@ import { StatusBadge } from "../../components/StatusBadge";
 import { Spinner, useToast } from "../../components/ui";
 import { api, ApiError, getToken } from "../../lib/api";
 import { formatDate, formatMoney } from "../../lib/format";
+import { useI18n, useT } from "../../lib/i18n";
 import type { Invoice } from "../../lib/types";
 
 const EVENT_ICON: Record<string, React.ReactNode> = {
@@ -36,6 +37,8 @@ export default function InvoiceDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const toast = useToast();
+  const t = useT();
+  const { locale } = useI18n();
   const [invoice, setInvoice] = useState<Invoice | null>(null);
   const [payUrl, setPayUrl] = useState<string>("");
   const [busy, setBusy] = useState(false);
@@ -46,7 +49,7 @@ export default function InvoiceDetailPage() {
       setInvoice(res.invoice);
       setPayUrl(res.payUrl);
     } catch {
-      toast("Invoice not found", "error");
+      toast(t("invoice.notFound"), "error");
       navigate("/app/invoices");
     }
   };
@@ -63,7 +66,7 @@ export default function InvoiceDetailPage() {
       toast(successMsg, "success");
       await load();
     } catch (err) {
-      toast(err instanceof ApiError ? err.message : "Action failed", "error");
+      toast(err instanceof ApiError ? err.message : t("common.actionFailed"), "error");
     } finally {
       setBusy(false);
     }
@@ -80,7 +83,7 @@ export default function InvoiceDetailPage() {
       a.click();
       URL.revokeObjectURL(url);
     } catch {
-      toast("Failed to download PDF", "error");
+      toast(t("invoice.pdfFailed"), "error");
     }
   };
 
@@ -90,7 +93,7 @@ export default function InvoiceDetailPage() {
 
   return (
     <div className="animate-fade-in">
-      <Link to="/app/invoices" className="mb-4 inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-700 dark:text-slate-400"><ArrowLeft className="h-4 w-4" /> Invoices</Link>
+      <Link to="/app/invoices" className="mb-4 inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-700 dark:text-slate-400"><ArrowLeft className="h-4 w-4" /> {t("invoice.back")}</Link>
 
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
@@ -99,9 +102,9 @@ export default function InvoiceDetailPage() {
           {invoice.createdByAi && <span className="badge bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-300"><Sparkles className="h-3 w-3" /> AI</span>}
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <button className="btn-secondary" onClick={downloadPdf}><Download className="h-4 w-4" /> PDF</button>
-          {canEdit && <Link to={`/app/invoices/${id}/edit`} className="btn-secondary"><Pencil className="h-4 w-4" /> Edit</Link>}
-          {invoice.status !== "PAID" && <button className="btn-primary" disabled={busy} onClick={() => action(() => api.post(`/invoices/${id}/send`), "Invoice sent")}><Send className="h-4 w-4" /> Send</button>}
+          <button className="btn-secondary" onClick={downloadPdf}><Download className="h-4 w-4" /> {t("invoice.pdf")}</button>
+          {canEdit && <Link to={`/app/invoices/${id}/edit`} className="btn-secondary"><Pencil className="h-4 w-4" /> {t("common.edit")}</Link>}
+          {invoice.status !== "PAID" && <button className="btn-primary" disabled={busy} onClick={() => action(() => api.post(`/invoices/${id}/send`), t("invoice.sent"))}><Send className="h-4 w-4" /> {t("common.send")}</button>}
         </div>
       </div>
 
@@ -111,25 +114,25 @@ export default function InvoiceDetailPage() {
           <div className="card p-8">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Bill to</p>
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">{t("invoice.billTo")}</p>
                 <p className="mt-1 font-semibold text-slate-900 dark:text-white">{invoice.customerName ?? "—"}</p>
                 {invoice.customerAddress && <p className="whitespace-pre-line text-sm text-slate-500 dark:text-slate-400">{invoice.customerAddress}</p>}
                 {invoice.customerVat && <p className="text-sm text-slate-500 dark:text-slate-400">VAT: {invoice.customerVat}</p>}
               </div>
               <div className="text-right text-sm">
-                <p className="text-slate-500 dark:text-slate-400">Issued {formatDate(invoice.issueDate)}</p>
-                <p className="text-slate-500 dark:text-slate-400">Due {formatDate(invoice.dueDate)}</p>
+                <p className="text-slate-500 dark:text-slate-400">{t("invoice.issued", { date: formatDate(invoice.issueDate, locale) })}</p>
+                <p className="text-slate-500 dark:text-slate-400">{t("invoice.due", { date: formatDate(invoice.dueDate, locale) })}</p>
               </div>
             </div>
 
             <table className="mt-8 w-full text-sm">
               <thead>
                 <tr className="border-b border-slate-200 text-left text-xs uppercase tracking-wide text-slate-400 dark:border-slate-800">
-                  <th className="pb-2">Description</th>
-                  <th className="pb-2 text-right">Qty</th>
-                  <th className="pb-2 text-right">Price</th>
-                  <th className="pb-2 text-right">VAT</th>
-                  <th className="pb-2 text-right">Amount</th>
+                  <th className="pb-2">{t("invoice.description")}</th>
+                  <th className="pb-2 text-right">{t("invoice.qty")}</th>
+                  <th className="pb-2 text-right">{t("invoice.price")}</th>
+                  <th className="pb-2 text-right">{t("invoice.vat")}</th>
+                  <th className="pb-2 text-right">{t("invoice.amount")}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
@@ -147,11 +150,11 @@ export default function InvoiceDetailPage() {
 
             <div className="mt-6 flex justify-end">
               <dl className="w-full max-w-xs space-y-2 text-sm">
-                <div className="flex justify-between"><dt className="text-slate-500 dark:text-slate-400">Subtotal</dt><dd className="font-medium text-slate-900 dark:text-white">{formatMoney(invoice.subtotal, invoice.currency)}</dd></div>
-                {invoice.discountTotal > 0 && <div className="flex justify-between"><dt className="text-slate-500 dark:text-slate-400">Discount</dt><dd className="font-medium text-rose-500">-{formatMoney(invoice.discountTotal, invoice.currency)}</dd></div>}
-                <div className="flex justify-between"><dt className="text-slate-500 dark:text-slate-400">VAT</dt><dd className="font-medium text-slate-900 dark:text-white">{formatMoney(invoice.vatTotal, invoice.currency)}</dd></div>
-                <div className="flex justify-between border-t border-slate-200 pt-2 text-base font-bold dark:border-slate-800"><dt>Total</dt><dd className="text-brand-600 dark:text-brand-400">{formatMoney(invoice.total, invoice.currency)}</dd></div>
-                {invoice.amountPaid > 0 && invoice.status !== "PAID" && <div className="flex justify-between text-emerald-600"><dt>Paid</dt><dd>{formatMoney(invoice.amountPaid, invoice.currency)}</dd></div>}
+                <div className="flex justify-between"><dt className="text-slate-500 dark:text-slate-400">{t("invoice.subtotal")}</dt><dd className="font-medium text-slate-900 dark:text-white">{formatMoney(invoice.subtotal, invoice.currency)}</dd></div>
+                {invoice.discountTotal > 0 && <div className="flex justify-between"><dt className="text-slate-500 dark:text-slate-400">{t("invoice.discount")}</dt><dd className="font-medium text-rose-500">-{formatMoney(invoice.discountTotal, invoice.currency)}</dd></div>}
+                <div className="flex justify-between"><dt className="text-slate-500 dark:text-slate-400">{t("invoice.vat")}</dt><dd className="font-medium text-slate-900 dark:text-white">{formatMoney(invoice.vatTotal, invoice.currency)}</dd></div>
+                <div className="flex justify-between border-t border-slate-200 pt-2 text-base font-bold dark:border-slate-800"><dt>{t("invoice.total")}</dt><dd className="text-brand-600 dark:text-brand-400">{formatMoney(invoice.total, invoice.currency)}</dd></div>
+                {invoice.amountPaid > 0 && invoice.status !== "PAID" && <div className="flex justify-between text-emerald-600"><dt>{t("invoice.paid")}</dt><dd>{formatMoney(invoice.amountPaid, invoice.currency)}</dd></div>}
               </dl>
             </div>
 
@@ -161,11 +164,11 @@ export default function InvoiceDetailPage() {
           {/* Public link */}
           <div className="card mt-4 flex items-center justify-between p-4">
             <div className="min-w-0">
-              <p className="text-xs font-medium text-slate-400">Public payment link</p>
+              <p className="text-xs font-medium text-slate-400">{t("invoice.publicLink")}</p>
               <p className="truncate text-sm text-slate-600 dark:text-slate-300">{payUrl}</p>
             </div>
             <div className="flex gap-2">
-              <button className="btn-secondary px-3!" onClick={() => { navigator.clipboard.writeText(payUrl); toast("Link copied", "success"); }}><Copy className="h-4 w-4" /></button>
+              <button className="btn-secondary px-3!" onClick={() => { navigator.clipboard.writeText(payUrl); toast(t("invoice.linkCopied"), "success"); }}><Copy className="h-4 w-4" /></button>
               <a className="btn-secondary px-3!" href={payUrl} target="_blank" rel="noreferrer"><ExternalLink className="h-4 w-4" /></a>
             </div>
           </div>
@@ -174,22 +177,22 @@ export default function InvoiceDetailPage() {
         {/* Actions + timeline */}
         <div className="space-y-6">
           <div className="card p-6">
-            <h3 className="mb-4 font-semibold text-slate-900 dark:text-white">Actions</h3>
+            <h3 className="mb-4 font-semibold text-slate-900 dark:text-white">{t("invoice.actions")}</h3>
             <div className="grid grid-cols-2 gap-2">
               {invoice.status !== "PAID" && (
-                <button className="btn-secondary col-span-2" disabled={busy} onClick={() => action(() => api.post(`/invoices/${id}/mark-paid`, {}), "Marked as paid")}><Check className="h-4 w-4" /> Mark as paid</button>
+                <button className="btn-secondary col-span-2" disabled={busy} onClick={() => action(() => api.post(`/invoices/${id}/mark-paid`, {}), t("invoice.markedPaid"))}><Check className="h-4 w-4" /> {t("invoice.markPaid")}</button>
               )}
-              <button className="btn-secondary" disabled={busy} onClick={() => action(async () => { const r = await api.post<{ invoice: Invoice }>(`/invoices/${id}/duplicate`); navigate(`/app/invoices/${r.invoice.id}/edit`); }, "Duplicated")}><Copy className="h-4 w-4" /> Duplicate</button>
-              <button className="btn-secondary" disabled={busy} onClick={() => action(async () => { const r = await api.post<{ invoice: Invoice }>(`/invoices/${id}/credit-note`); navigate(`/app/invoices/${r.invoice.id}`); }, "Credit note created")}><FileMinus className="h-4 w-4" /> Credit note</button>
+              <button className="btn-secondary" disabled={busy} onClick={() => action(async () => { const r = await api.post<{ invoice: Invoice }>(`/invoices/${id}/duplicate`); navigate(`/app/invoices/${r.invoice.id}/edit`); }, t("invoice.duplicated"))}><Copy className="h-4 w-4" /> {t("invoice.duplicate")}</button>
+              <button className="btn-secondary" disabled={busy} onClick={() => action(async () => { const r = await api.post<{ invoice: Invoice }>(`/invoices/${id}/credit-note`); navigate(`/app/invoices/${r.invoice.id}`); }, t("invoice.creditCreated"))}><FileMinus className="h-4 w-4" /> {t("invoice.creditNote")}</button>
               {invoice.status !== "PAID" && invoice.status !== "DRAFT" && (
-                <button className="btn-secondary col-span-2" disabled={busy} onClick={() => action(() => api.post(`/invoices/${id}/remind`), "Reminder sent")}><Bell className="h-4 w-4" /> Send reminder</button>
+                <button className="btn-secondary col-span-2" disabled={busy} onClick={() => action(() => api.post(`/invoices/${id}/remind`), t("invoice.reminderSent"))}><Bell className="h-4 w-4" /> {t("invoice.sendReminder")}</button>
               )}
-              <button className="btn-secondary col-span-2 text-rose-600" disabled={busy} onClick={() => { if (confirm("Delete this invoice?")) action(async () => { await api.del(`/invoices/${id}`); navigate("/app/invoices"); }, "Deleted"); }}><Trash2 className="h-4 w-4" /> Delete</button>
+              <button className="btn-secondary col-span-2 text-rose-600" disabled={busy} onClick={() => { if (confirm(t("invoice.deleteConfirm"))) action(async () => { await api.del(`/invoices/${id}`); navigate("/app/invoices"); }, t("invoice.deleted")); }}><Trash2 className="h-4 w-4" /> {t("common.delete")}</button>
             </div>
           </div>
 
           <div className="card p-6">
-            <h3 className="mb-4 font-semibold text-slate-900 dark:text-white">Activity</h3>
+            <h3 className="mb-4 font-semibold text-slate-900 dark:text-white">{t("invoice.activity")}</h3>
             <ol className="space-y-4">
               {(invoice.events ?? []).map((ev) => (
                 <li key={ev.id} className="flex gap-3">
@@ -202,7 +205,7 @@ export default function InvoiceDetailPage() {
                   </div>
                 </li>
               ))}
-              {(!invoice.events || invoice.events.length === 0) && <p className="text-sm text-slate-400">No activity yet.</p>}
+              {(!invoice.events || invoice.events.length === 0) && <p className="text-sm text-slate-400">{t("invoice.noActivity")}</p>}
             </ol>
           </div>
         </div>

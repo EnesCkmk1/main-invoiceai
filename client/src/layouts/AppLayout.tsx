@@ -15,23 +15,26 @@ import {
 } from "lucide-react";
 import { Logo } from "../components/Logo";
 import { ThemeToggle } from "../components/ThemeToggle";
+import { LanguageToggleIcon } from "../components/LanguageToggle";
 import { useAuth } from "../lib/auth";
+import { useT } from "../lib/i18n";
 import { initials } from "../lib/format";
 import { Modal } from "../components/ui";
-
-const nav = [
-  { to: "/app", label: "Dashboard", icon: LayoutDashboard, end: true },
-  { to: "/app/invoices", label: "Invoices", icon: FileText, end: false },
-  { to: "/app/customers", label: "Customers", icon: Users, end: false },
-  { to: "/app/analytics", label: "Analytics", icon: BarChart3, end: false },
-  { to: "/app/settings", label: "Settings", icon: Settings, end: false },
-];
 
 export function AppLayout() {
   const { user, company, logout } = useAuth();
   const navigate = useNavigate();
+  const t = useT();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
+
+  const nav = [
+    { to: "/app", label: t("nav.dashboard"), icon: LayoutDashboard, end: true },
+    { to: "/app/invoices", label: t("nav.invoices"), icon: FileText, end: false },
+    { to: "/app/customers", label: t("nav.customers"), icon: Users, end: false },
+    { to: "/app/analytics", label: t("nav.analytics"), icon: BarChart3, end: false },
+    { to: "/app/settings", label: t("nav.settings"), icon: Settings, end: false },
+  ];
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -44,8 +47,6 @@ export function AppLayout() {
       } else if (e.key === "c" || e.key === "C") {
         e.preventDefault();
         navigate("/app/customers?new=1");
-      } else if (e.key === "g") {
-        // sequence handled crudely: press g then d/i
       } else if (e.key === "?") {
         setShortcutsOpen(true);
       }
@@ -81,7 +82,7 @@ export function AppLayout() {
       </nav>
       <div className="p-3">
         <NavLink to="/app/invoices/new" onClick={() => setMobileOpen(false)} className="btn-primary w-full">
-          <Sparkles className="h-4 w-4" /> New Invoice
+          <Sparkles className="h-4 w-4" /> {t("nav.newInvoice")}
         </NavLink>
       </div>
       <div className="border-t border-slate-200 p-3 dark:border-slate-800">
@@ -93,7 +94,7 @@ export function AppLayout() {
             <p className="truncate text-sm font-semibold text-slate-800 dark:text-slate-100">{user?.name}</p>
             <p className="truncate text-xs text-slate-500 dark:text-slate-400">{company?.name}</p>
           </div>
-          <button onClick={logout} className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-rose-500 dark:hover:bg-slate-800" aria-label="Log out">
+          <button onClick={logout} className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-rose-500 dark:hover:bg-slate-800" aria-label={t("nav.logout")}>
             <LogOut className="h-4 w-4" />
           </button>
         </div>
@@ -103,12 +104,10 @@ export function AppLayout() {
 
   return (
     <div className="flex min-h-screen bg-slate-50 dark:bg-slate-950">
-      {/* Desktop sidebar */}
       <aside className="hidden w-64 shrink-0 flex-col border-r border-slate-200 bg-white lg:flex dark:border-slate-800 dark:bg-slate-900">
         <SidebarContent />
       </aside>
 
-      {/* Mobile sidebar */}
       {mobileOpen && (
         <div className="fixed inset-0 z-40 lg:hidden">
           <div className="absolute inset-0 bg-slate-900/40" onClick={() => setMobileOpen(false)} />
@@ -124,15 +123,16 @@ export function AppLayout() {
             <Menu className="h-5 w-5" />
           </button>
           <div className="hidden items-center gap-2 rounded-lg border border-slate-200 px-2 py-1 text-xs text-slate-400 lg:flex dark:border-slate-800">
-            Press <kbd className="rounded-sm bg-slate-100 px-1.5 py-0.5 font-mono dark:bg-slate-800">N</kbd> for new invoice
+            {t("nav.pressN", { key: "N" })}
           </div>
           <div className="flex flex-1 items-center justify-end gap-2">
-            <button className="btn-ghost h-9 w-9 px-0!" onClick={() => setShortcutsOpen(true)} aria-label="Shortcuts">
+            <button className="btn-ghost h-9 w-9 px-0!" onClick={() => setShortcutsOpen(true)} aria-label={t("nav.shortcuts")}>
               <Keyboard className="h-5 w-5" />
             </button>
+            <LanguageToggleIcon />
             <ThemeToggle />
             <button className="btn-primary" onClick={() => navigate("/app/invoices/new")}>
-              <Plus className="h-4 w-4" /> New
+              <Plus className="h-4 w-4" /> {t("nav.new")}
             </button>
           </div>
         </header>
@@ -142,12 +142,12 @@ export function AppLayout() {
         </main>
       </div>
 
-      <Modal open={shortcutsOpen} onClose={() => setShortcutsOpen(false)} title="Keyboard shortcuts">
+      <Modal open={shortcutsOpen} onClose={() => setShortcutsOpen(false)} title={t("nav.shortcuts")}>
         <div className="space-y-3 text-sm">
           {[
-            ["N", "New invoice"],
-            ["C", "New customer"],
-            ["?", "Show this help"],
+            ["N", t("nav.shortcutNewInvoice")],
+            ["C", t("nav.shortcutNewCustomer")],
+            ["?", t("nav.shortcutHelp")],
           ].map(([key, label]) => (
             <div key={key} className="flex items-center justify-between">
               <span className="text-slate-600 dark:text-slate-300">{label}</span>
@@ -156,7 +156,7 @@ export function AppLayout() {
           ))}
         </div>
         <button className="btn-secondary mt-6 w-full" onClick={() => setShortcutsOpen(false)}>
-          <X className="h-4 w-4" /> Close
+          <X className="h-4 w-4" /> {t("common.close")}
         </button>
       </Modal>
     </div>

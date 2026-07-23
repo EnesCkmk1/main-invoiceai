@@ -4,8 +4,14 @@ import { prisma } from "../lib/prisma.js";
 import { ApiError, asyncHandler } from "../lib/http.js";
 import { requireAuth, requireCompany } from "../middleware/auth.js";
 import { computeTotals, nextInvoiceNumber, publicPayUrl, toPdfData } from "../services/invoiceService.js";
+import {
+  defaultInvoiceEmailBody,
+  defaultInvoiceEmailSubject,
+  resolveLocale,
+} from "../lib/i18n.js";
 import { renderInvoicePdf } from "../services/pdf.js";
 import { sendMail } from "../lib/mailer.js";
+import { sendInvoiceReminder } from "../services/reminderService.js";
 
 const router = Router();
 router.use(requireAuth, requireCompany);
@@ -348,16 +354,17 @@ router.post(
     const company = await prisma.company.findUnique({ where: { id: companyId } });
     const pdf = await renderInvoicePdf(toPdfData(invoice, company, publicPayUrl(invoice.publicToken)));
 
-    const subject = (company?.emailSubjectTemplate || `Invoice ${invoice.number} from ${company?.name}`)
+    const locale = resolveLocale(company?.locale);
+    const payUrl = publicPayUrl(invoice.publicToken);
+    const subject = (company?.emailSubjectTemplate
+      || defaultInvoiceEmailSubject(locale, invoice.number, company?.name || ""))
       .replace("{number}", invoice.number)
       .replace("{company}", company?.name || "");
-    const payUrl = publicPayUrl(invoice.publicToken);
-    const body =
-      (company?.emailBodyTemplate ||
-        `<p>Hi ${invoice.customerName || "there"},</p><p>Please find attached invoice ${invoice.number} for ${invoice.total.toLocaleString()} ${invoice.currency}.</p><p>You can view and pay online here: <a href="${payUrl}">${payUrl}</a></p><p>Thank you!</p>`)
-        .replace("{number}", invoice.number)
-        .replace("{company}", company?.name || "")
-        .replace("{payUrl}", payUrl);
+    const body = (company?.emailBodyTemplate
+      || defaultInvoiceEmailBody(locale, invoice.customerName, invoice.number, invoice.total, invoice.currency, payUrl))
+      .replace("{number}", invoice.number)
+      .replace("{company}", company?.name || "")
+      .replace("{payUrl}", payUrl);
 
     const { delivered } = await sendMail({
       to: invoice.customerEmail,
@@ -424,16 +431,17 @@ router.post(
   "/:id/remind",
   asyncHandler(async (req, res) => {
     const companyId = req.user!.companyId!;
-    const invoice = await prisma.invoice.findFirst({ where: { id: String(req.params.id), companyId } });
+    const invoice = await prisma.invoice.findFirst({
+      where: { id: String(req.params.id), companyId },
+      include: { company: true },
+    });
     if (!invoice) throw new ApiError(404, "Invoice not found");
     if (!invoice.customerEmail) throw new ApiError(400, "Customer has no email address");
-    const payUrl = publicPayUrl(invoice.publicToken);
-    const { delivered } = await sendMail({
-      to: invoice.customerEmail,
-      subject: `Reminder: invoice ${invoice.number} is due`,
-      html: `<p>Hi ${invoice.customerName || "there"},</p><p>This is a friendly reminder that invoice ${invoice.number} for ${invoice.total.toLocaleString()} ${invoice.currency} is due on ${invoice.dueDate.toLocaleDateString()}.</p><p>Pay online: <a href="${payUrl}">${payUrl}</a></p>`,
+
+    const { delivered } = await sendInvoiceReminder(invoice, invoice.company);
+    await prisma.invoiceEvent.create({
+      data: { invoiceId: invoice.id, type: "REMINDER_SENT", meta: delivered ? "email" : "console" },
     });
-    await prisma.invoiceEvent.create({ data: { invoiceId: invoice.id, type: "REMINDER_SENT", meta: delivered ? "email" : "console" } });
     res.json({ ok: true, delivered });
   })
 );

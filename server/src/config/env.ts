@@ -37,6 +37,12 @@ export const env = {
   // OpenAI (optional — AI works without it via the rule-based parser)
   openaiApiKey: optional("OPENAI_API_KEY"),
   openaiModel: optional("OPENAI_MODEL", "gpt-4o-mini"),
+
+  // Cron jobs (Vercel scheduled tasks)
+  cronSecret: optional("CRON_SECRET"),
+
+  // Error monitoring (optional)
+  sentryDsn: optional("SENTRY_DSN"),
 };
 
 export const isProd = env.nodeEnv === "production";

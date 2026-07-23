@@ -11,9 +11,12 @@ export function formatNumber(amount: number): string {
   return new Intl.NumberFormat("da-DK", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(amount);
 }
 
-export function formatDate(date: string | Date): string {
+import type { Locale } from "./translations";
+
+export function formatDate(date: string | Date, locale: Locale = "da"): string {
   const d = typeof date === "string" ? new Date(date) : date;
-  return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+  const tag = locale === "da" ? "da-DK" : "en-GB";
+  return d.toLocaleDateString(tag, { day: "numeric", month: "short", year: "numeric" });
 }
 
 export function relativeDate(date: string | Date): string {
