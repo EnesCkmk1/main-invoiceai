@@ -13,3 +13,4 @@ coverage
 .env*.local
 server/public/
 .env*
+public/

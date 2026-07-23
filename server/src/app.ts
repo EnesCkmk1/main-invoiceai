@@ -1,5 +1,6 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import fs from "node:fs";
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -102,11 +103,26 @@ export function createApp() {
   // lives on one domain (relative /api calls Just Work).
   if (process.env.VERCEL || process.env.SERVE_SPA === "1") {
     const here = path.dirname(fileURLToPath(import.meta.url));
-    const publicDir = path.resolve(here, "../public");
-    app.use(express.static(publicDir, { index: false, maxAge: "1h" }));
-    app.get(/^(?!\/api).*/, (_req, res) => {
-      res.sendFile(path.join(publicDir, "index.html"));
+    // Prefer repo-root /public (Vercel Express convention); fall back to
+    // server/public for local SERVE_SPA experiments.
+    const candidates = [
+      path.resolve(process.cwd(), "public"),
+      path.resolve(here, "../public"),
+      path.resolve(here, "../../public"),
+    ];
+    const publicDir = candidates.find((dir) => {
+      try {
+        return fs.existsSync(path.join(dir, "index.html"));
+      } catch {
+        return false;
+      }
     });
+    if (publicDir) {
+      app.use(express.static(publicDir, { index: false, maxAge: "1h" }));
+      app.get(/^(?!\/api).*/, (_req, res) => {
+        res.sendFile(path.join(publicDir, "index.html"));
+      });
+    }
   }
 
   app.use(errorHandler);
