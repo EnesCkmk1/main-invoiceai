@@ -105,7 +105,6 @@ function Hero() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.2 }}
-          id="demo"
           className="mx-auto mt-16 max-w-3xl"
         >
           <AiDemo />
@@ -154,6 +153,57 @@ function AiDemo() {
         </motion.div>
       </div>
     </div>
+  );
+}
+
+function VideoDemo() {
+  return (
+    <section id="demo" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-20">
+      <div className="mx-auto max-w-2xl text-center">
+        <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-white">
+          See it in action
+        </h2>
+        <p className="mt-4 text-lg text-slate-600 dark:text-slate-300">
+          From one sentence to a paid invoice — the entire flow in 45 seconds.
+          No cuts, no mockups. This is the real product.
+        </p>
+      </div>
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.6 }}
+        className="mx-auto mt-10 max-w-4xl"
+      >
+        <div className="card overflow-hidden p-1.5 shadow-2xl shadow-brand-600/10">
+          <div className="rounded-xl bg-slate-50 p-3 dark:bg-slate-950">
+            <div className="mb-3 flex items-center gap-2 px-2 text-xs font-medium text-slate-400">
+              <span className="h-3 w-3 rounded-full bg-rose-400" />
+              <span className="h-3 w-3 rounded-full bg-amber-400" />
+              <span className="h-3 w-3 rounded-full bg-emerald-400" />
+              <span className="ml-2">InvoiceFlow AI — Product demo</span>
+            </div>
+            <video
+              controls
+              playsInline
+              preload="metadata"
+              poster="/demo-poster.jpg"
+              className="w-full rounded-lg"
+              aria-label="Product demo: creating and sending an invoice with AI, then getting paid"
+            >
+              <source src="/demo.mp4" type="video/mp4" />
+              Your browser does not support embedded videos.
+            </video>
+          </div>
+        </div>
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-slate-500 dark:text-slate-400">
+          <span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-emerald-500" /> One sentence in</span>
+          <span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-emerald-500" /> AI fills the invoice</span>
+          <span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-emerald-500" /> Sent &amp; paid online</span>
+          <span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-emerald-500" /> Analytics included</span>
+        </div>
+      </motion.div>
+    </section>
   );
 }
 
@@ -342,6 +392,7 @@ export default function LandingPage() {
     <div className="min-h-screen">
       <Nav />
       <Hero />
+      <VideoDemo />
       <Features />
       <Pricing />
       <Testimonials />
