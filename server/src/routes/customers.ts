@@ -52,7 +52,7 @@ router.get(
   "/:id",
   asyncHandler(async (req, res) => {
     const customer = await prisma.customer.findFirst({
-      where: { id: req.params.id, companyId: req.user!.companyId! },
+      where: { id: String(req.params.id), companyId: req.user!.companyId! },
       include: { invoices: { orderBy: { createdAt: "desc" }, take: 20 } },
     });
     if (!customer) throw new ApiError(404, "Customer not found");
@@ -89,10 +89,10 @@ router.put(
   "/:id",
   asyncHandler(async (req, res) => {
     const data = customerSchema.partial().parse(req.body);
-    const existing = await prisma.customer.findFirst({ where: { id: req.params.id, companyId: req.user!.companyId! } });
+    const existing = await prisma.customer.findFirst({ where: { id: String(req.params.id), companyId: req.user!.companyId! } });
     if (!existing) throw new ApiError(404, "Customer not found");
     const customer = await prisma.customer.update({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       data: {
         ...data,
         country: data.country ?? undefined,
@@ -106,9 +106,9 @@ router.put(
 router.delete(
   "/:id",
   asyncHandler(async (req, res) => {
-    const existing = await prisma.customer.findFirst({ where: { id: req.params.id, companyId: req.user!.companyId! } });
+    const existing = await prisma.customer.findFirst({ where: { id: String(req.params.id), companyId: req.user!.companyId! } });
     if (!existing) throw new ApiError(404, "Customer not found");
-    await prisma.customer.delete({ where: { id: req.params.id } });
+    await prisma.customer.delete({ where: { id: String(req.params.id) } });
     res.json({ ok: true });
   })
 );

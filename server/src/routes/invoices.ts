@@ -66,7 +66,7 @@ router.get(
   "/:id",
   asyncHandler(async (req, res) => {
     const invoice = await prisma.invoice.findFirst({
-      where: { id: req.params.id, companyId: req.user!.companyId! },
+      where: { id: String(req.params.id), companyId: req.user!.companyId! },
       include: { items: { orderBy: { position: "asc" } }, customer: true, payments: true, events: { orderBy: { createdAt: "desc" } } },
     });
     if (!invoice) throw new ApiError(404, "Invoice not found");
@@ -145,7 +145,7 @@ router.put(
   asyncHandler(async (req, res) => {
     const data = invoiceSchema.partial().parse(req.body);
     const companyId = req.user!.companyId!;
-    const existing = await prisma.invoice.findFirst({ where: { id: req.params.id, companyId } });
+    const existing = await prisma.invoice.findFirst({ where: { id: String(req.params.id), companyId } });
     if (!existing) throw new ApiError(404, "Invoice not found");
     if (existing.status === "PAID") throw new ApiError(400, "Paid invoices cannot be edited");
 
@@ -216,7 +216,7 @@ router.put(
 router.delete(
   "/:id",
   asyncHandler(async (req, res) => {
-    const existing = await prisma.invoice.findFirst({ where: { id: req.params.id, companyId: req.user!.companyId! } });
+    const existing = await prisma.invoice.findFirst({ where: { id: String(req.params.id), companyId: req.user!.companyId! } });
     if (!existing) throw new ApiError(404, "Invoice not found");
     await prisma.invoice.delete({ where: { id: existing.id } });
     res.json({ ok: true });
@@ -228,7 +228,7 @@ router.post(
   "/:id/duplicate",
   asyncHandler(async (req, res) => {
     const companyId = req.user!.companyId!;
-    const src = await prisma.invoice.findFirst({ where: { id: req.params.id, companyId }, include: { items: true } });
+    const src = await prisma.invoice.findFirst({ where: { id: String(req.params.id), companyId }, include: { items: true } });
     if (!src) throw new ApiError(404, "Invoice not found");
     const number = await nextInvoiceNumber(companyId);
     const invoice = await prisma.invoice.create({
@@ -277,7 +277,7 @@ router.post(
   "/:id/credit-note",
   asyncHandler(async (req, res) => {
     const companyId = req.user!.companyId!;
-    const src = await prisma.invoice.findFirst({ where: { id: req.params.id, companyId }, include: { items: true } });
+    const src = await prisma.invoice.findFirst({ where: { id: String(req.params.id), companyId }, include: { items: true } });
     if (!src) throw new ApiError(404, "Invoice not found");
     const number = await nextInvoiceNumber(companyId);
     const invoice = await prisma.invoice.create({
@@ -326,7 +326,7 @@ router.get(
   "/:id/pdf",
   asyncHandler(async (req, res) => {
     const companyId = req.user!.companyId!;
-    const invoice = await prisma.invoice.findFirst({ where: { id: req.params.id, companyId }, include: { items: { orderBy: { position: "asc" } } } });
+    const invoice = await prisma.invoice.findFirst({ where: { id: String(req.params.id), companyId }, include: { items: { orderBy: { position: "asc" } } } });
     if (!invoice) throw new ApiError(404, "Invoice not found");
     const company = await prisma.company.findUnique({ where: { id: companyId } });
     const pdf = await renderInvoicePdf(toPdfData(invoice, company, publicPayUrl(invoice.publicToken)));
@@ -342,7 +342,7 @@ router.post(
   "/:id/send",
   asyncHandler(async (req, res) => {
     const companyId = req.user!.companyId!;
-    const invoice = await prisma.invoice.findFirst({ where: { id: req.params.id, companyId }, include: { items: { orderBy: { position: "asc" } } } });
+    const invoice = await prisma.invoice.findFirst({ where: { id: String(req.params.id), companyId }, include: { items: { orderBy: { position: "asc" } } } });
     if (!invoice) throw new ApiError(404, "Invoice not found");
     if (!invoice.customerEmail) throw new ApiError(400, "Customer has no email address");
     const company = await prisma.company.findUnique({ where: { id: companyId } });
@@ -386,7 +386,7 @@ router.post(
   asyncHandler(async (req, res) => {
     const companyId = req.user!.companyId!;
     const { amount, method } = markPaidSchema.parse(req.body);
-    const invoice = await prisma.invoice.findFirst({ where: { id: req.params.id, companyId } });
+    const invoice = await prisma.invoice.findFirst({ where: { id: String(req.params.id), companyId } });
     if (!invoice) throw new ApiError(404, "Invoice not found");
     const payAmount = amount ?? invoice.total - invoice.amountPaid;
     const amountPaid = invoice.amountPaid + payAmount;
@@ -412,7 +412,7 @@ router.post(
   "/:id/status",
   asyncHandler(async (req, res) => {
     const { status } = statusSchema.parse(req.body);
-    const existing = await prisma.invoice.findFirst({ where: { id: req.params.id, companyId: req.user!.companyId! } });
+    const existing = await prisma.invoice.findFirst({ where: { id: String(req.params.id), companyId: req.user!.companyId! } });
     if (!existing) throw new ApiError(404, "Invoice not found");
     const invoice = await prisma.invoice.update({ where: { id: existing.id }, data: { status }, include: { items: true } });
     res.json({ invoice });
@@ -424,7 +424,7 @@ router.post(
   "/:id/remind",
   asyncHandler(async (req, res) => {
     const companyId = req.user!.companyId!;
-    const invoice = await prisma.invoice.findFirst({ where: { id: req.params.id, companyId } });
+    const invoice = await prisma.invoice.findFirst({ where: { id: String(req.params.id), companyId } });
     if (!invoice) throw new ApiError(404, "Invoice not found");
     if (!invoice.customerEmail) throw new ApiError(400, "Customer has no email address");
     const payUrl = publicPayUrl(invoice.publicToken);

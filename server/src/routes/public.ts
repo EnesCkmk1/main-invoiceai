@@ -20,7 +20,7 @@ async function loadByToken(token: string) {
 router.get(
   "/invoice/:token",
   asyncHandler(async (req, res) => {
-    const invoice = await loadByToken(req.params.token);
+    const invoice = await loadByToken(String(req.params.token));
     if (!invoice) throw new ApiError(404, "Invoice not found");
 
     if (invoice.status === "SENT" && !invoice.viewedAt) {
@@ -68,7 +68,7 @@ router.get(
 router.get(
   "/invoice/:token/pdf",
   asyncHandler(async (req, res) => {
-    const invoice = await loadByToken(req.params.token);
+    const invoice = await loadByToken(String(req.params.token));
     if (!invoice) throw new ApiError(404, "Invoice not found");
     const pdf = await renderInvoicePdf(toPdfData(invoice, invoice.company, `${env.appUrl}/pay/${invoice.publicToken}`));
     await prisma.invoiceEvent.create({ data: { invoiceId: invoice.id, type: "DOWNLOADED", meta: "public" } });
@@ -82,7 +82,7 @@ router.get(
 router.post(
   "/invoice/:token/pay",
   asyncHandler(async (req, res) => {
-    const invoice = await loadByToken(req.params.token);
+    const invoice = await loadByToken(String(req.params.token));
     if (!invoice) throw new ApiError(404, "Invoice not found");
     if (invoice.status === "PAID") throw new ApiError(400, "Invoice already paid");
     if (!stripe) throw new ApiError(503, "Online payments are not configured");
@@ -117,7 +117,7 @@ router.post(
   asyncHandler(async (req, res) => {
     if (isProd) throw new ApiError(403, "Not available");
     const { method } = simulateSchema.parse(req.body);
-    const invoice = await loadByToken(req.params.token);
+    const invoice = await loadByToken(String(req.params.token));
     if (!invoice) throw new ApiError(404, "Invoice not found");
     const updated = await prisma.invoice.update({
       where: { id: invoice.id },
