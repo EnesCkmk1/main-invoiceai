@@ -114,7 +114,7 @@ export default function DashboardPage() {
                 <XAxis dataKey="label" tickLine={false} axisLine={false} className="text-xs" stroke="#94a3b8" />
                 <YAxis tickLine={false} axisLine={false} width={40} stroke="#94a3b8" className="text-xs" tickFormatter={(v) => (v >= 1000 ? `${v / 1000}k` : v)} />
                 <Tooltip
-                  formatter={(v: number) => formatMoney(v, data.currency)}
+                  formatter={(v) => formatMoney(Number(v ?? 0), data.currency)}
                   contentStyle={{ borderRadius: 12, border: "1px solid #e2e8f0", fontSize: 13 }}
                 />
                 <Area type="monotone" dataKey="revenue" stroke="#6366f1" strokeWidth={2.5} fill="url(#rev)" />

@@ -59,7 +59,7 @@ export default function AnalyticsPage() {
               <BarChart data={data.monthly}>
                 <XAxis dataKey="label" tickLine={false} axisLine={false} stroke="#94a3b8" className="text-xs" />
                 <YAxis tickLine={false} axisLine={false} width={40} stroke="#94a3b8" className="text-xs" tickFormatter={(v) => (v >= 1000 ? `${v / 1000}k` : v)} />
-                <Tooltip formatter={(v: number) => formatMoney(v, cur)} contentStyle={{ borderRadius: 12, border: "1px solid #e2e8f0", fontSize: 13 }} cursor={{ fill: "rgba(99,102,241,0.06)" }} />
+                <Tooltip formatter={(v) => formatMoney(Number(v ?? 0), cur)} contentStyle={{ borderRadius: 12, border: "1px solid #e2e8f0", fontSize: 13 }} cursor={{ fill: "rgba(99,102,241,0.06)" }} />
                 <Bar dataKey="revenue" fill="#6366f1" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
