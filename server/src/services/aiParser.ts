@@ -47,11 +47,15 @@ const UNIT_WORDS = [
   "hour",
   "hrs",
   "hr",
+  "timers",
   "timer",
+  "times",
   "time",
   "days",
   "day",
+  "dages",
   "dage",
+  "dags",
   "dag",
   "pcs",
   "pieces",
@@ -113,8 +117,9 @@ function detectPaymentTerms(text: string): number | null {
 function detectCustomer(text: string): string | null {
   // Keywords are matched case-insensitively, but the customer name capture
   // stays proper-noun aware (must start with an uppercase letter) so we don't
-  // accidentally grab connective words like "for".
-  const namePart = "([A-ZÆØÅ][\\wÆØÅæøå'&.\\-]*(?:\\s+[A-ZÆØÅ][\\wÆØÅæøå'&.\\-]*){0,3})";
+  // accidentally grab connective words like "for". À-Þ / À-ÿ cover accented
+  // Latin letters (Café, Sørensen, Müller, …).
+  const namePart = "([A-ZÀ-Þ][\\wÀ-ÿ'&.\\-]*(?:\\s+[A-ZÀ-Þ][\\wÀ-ÿ'&.\\-]*){0,3})";
   const patterns = [
     new RegExp(`(?:[Ii]nvoice|[Bb]ill|[Cc]harge|[Ff]aktur[ae]r?)\\s+(?:[Tt]il\\s+)?${namePart}`),
     new RegExp(`(?:[Ff]or|[Tt]il)\\s+(?:customer|kunde|client)\\s+${namePart}`),
@@ -161,8 +166,8 @@ function parseItemChunk(chunk: string, defaultVat: number): ParsedItem | null {
 
   // price: "at 750 DKK/hour", "til 750 kr", "@ 750", "for 5000", "750 kr/time"
   const pricePatterns = [
-    /(?:at|@|til|a|à|for|of)\s*(\d[\d.,]*)\s*(?:dkk|kr\.?|eur|€|usd|\$|gbp|£|sek|nok)?\s*(?:\/|per|pr\.?|i\s)?\s*(?:hour|hr|time|day|dag|pcs|stk|unit|item)?/i,
-    /(\d[\d.,]*)\s*(?:dkk|kr\.?|eur|€|usd|\$|gbp|£|sek|nok)\s*(?:\/|per|pr\.?|i\s)?\s*(?:hour|hr|time|day|dag|pcs|stk|unit|item)?/i,
+    /(?:at|@|til|a|à|for|of)\s*(\d[\d.,]*)\s*(?:dkk|kr\.?|eur|€|usd|\$|gbp|£|sek|nok)?\s*(?:\/|per|pr\.?|i\s)?\s*(?:hours?|hrs?|timers?|timen|times?|days?|dagen|dages?|dags?|pcs|stk|units?|items?)?/i,
+    /(\d[\d.,]*)\s*(?:dkk|kr\.?|eur|€|usd|\$|gbp|£|sek|nok)\s*(?:\/|per|pr\.?|i\s)?\s*(?:hours?|hrs?|timers?|timen|times?|days?|dagen|dages?|dags?|pcs|stk|units?|items?)?/i,
   ];
   for (const p of pricePatterns) {
     const pm = text.match(p);
@@ -177,8 +182,8 @@ function parseItemChunk(chunk: string, defaultVat: number): ParsedItem | null {
   // Build a clean description: strip out the numeric/price/qty parts.
   description = text
     .replace(unitPattern, " ")
-    .replace(/(?:at|@|til|a|à|for|of)\s*\d[\d.,]*\s*(?:dkk|kr\.?|eur|€|usd|\$|gbp|£|sek|nok)?\s*(?:\/|per|pr\.?|i\s)?\s*(?:hour|hr|time|day|dag|pcs|stk|unit|item)?/gi, " ")
-    .replace(/\d[\d.,]*\s*(?:dkk|kr\.?|eur|€|usd|\$|gbp|£|sek|nok)\s*(?:\/|per|pr\.?)?\s*(?:hour|hr|time|day|dag|pcs|stk|unit|item)?/gi, " ")
+    .replace(/(?:at|@|til|a|à|for|of)\s*\d[\d.,]*\s*(?:dkk|kr\.?|eur|€|usd|\$|gbp|£|sek|nok)?\s*(?:\/|per|pr\.?|i\s)?\s*(?:hours?|hrs?|timers?|timen|times?|days?|dagen|dages?|dags?|pcs|stk|units?|items?)?/gi, " ")
+    .replace(/\d[\d.,]*\s*(?:dkk|kr\.?|eur|€|usd|\$|gbp|£|sek|nok)\s*(?:\/|per|pr\.?)?\s*(?:hours?|hrs?|timers?|timen|times?|days?|dagen|dages?|dags?|pcs|stk|units?|items?)?/gi, " ")
     .replace(/\b(?:of|af|med|with|and|og)\b/gi, " ")
     .replace(/\s+/g, " ")
     .trim();
@@ -226,7 +231,7 @@ export function parseInvoicePrompt(prompt: string, defaults: { vatRate: number; 
   workPart = workPart.replace(/(?:and|og)?\s*\d{1,3}[-\s]?(?:day|days|dage|dags?)[\s\S]*$/i, " ");
   // Remove the leading "invoice <customer> for"
   workPart = workPart.replace(
-    /^.*?(?:invoice|bill|charge|faktur[ae]r?)\s+[\wÆØÅæøå'&.\s-]*?\s+(?:for|til)\s+/i,
+    /^.*?(?:invoice|bill|charge|faktur[ae]r?)\s+[\wÀ-ÿ'&.\s-]*?\s+(?:for|til)\s+/i,
     ""
   );
 
