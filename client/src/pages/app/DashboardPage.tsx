@@ -80,7 +80,7 @@ export default function DashboardPage() {
       />
 
       {aiSummary && (
-        <div className="mb-6 flex items-start gap-3 rounded-2xl border border-brand-200 bg-gradient-to-r from-brand-50 to-sky-50 p-4 dark:border-brand-500/20 dark:from-brand-500/10 dark:to-sky-500/10">
+        <div className="mb-6 flex items-start gap-3 rounded-2xl border border-brand-200 bg-linear-to-r from-brand-50 to-sky-50 p-4 dark:border-brand-500/20 dark:from-brand-500/10 dark:to-sky-500/10">
           <Sparkles className="mt-0.5 h-5 w-5 shrink-0 text-brand-500" />
           <p className="text-sm text-slate-700 dark:text-slate-200">{aiSummary}</p>
         </div>

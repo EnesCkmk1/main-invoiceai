@@ -39,7 +39,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   return (
     <ToastContext.Provider value={{ toast }}>
       {children}
-      <div className="pointer-events-none fixed bottom-6 right-6 z-[100] flex flex-col gap-2">
+      <div className="pointer-events-none fixed bottom-6 right-6 z-100 flex flex-col gap-2">
         <AnimatePresence>
           {toasts.map((t) => (
             <motion.div
@@ -91,7 +91,7 @@ export function Modal({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onClick={onClose} />
+          <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-xs" onClick={onClose} />
           <motion.div
             initial={{ opacity: 0, scale: 0.96, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}

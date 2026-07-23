@@ -23,7 +23,7 @@ export function AuthShell({ title, subtitle, children }: { title: string; subtit
       </div>
 
       {/* Right: brand panel */}
-      <div className="relative hidden w-1/2 overflow-hidden bg-gradient-to-br from-brand-600 to-sky-600 lg:block">
+      <div className="relative hidden w-1/2 overflow-hidden bg-linear-to-br from-brand-600 to-sky-600 lg:block">
         <div className="bg-grid absolute inset-0 opacity-10" />
         <div className="relative flex h-full flex-col justify-center px-16 text-white">
           <h2 className="text-4xl font-extrabold leading-tight">

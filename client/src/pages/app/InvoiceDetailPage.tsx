@@ -165,8 +165,8 @@ export default function InvoiceDetailPage() {
               <p className="truncate text-sm text-slate-600 dark:text-slate-300">{payUrl}</p>
             </div>
             <div className="flex gap-2">
-              <button className="btn-secondary !px-3" onClick={() => { navigator.clipboard.writeText(payUrl); toast("Link copied", "success"); }}><Copy className="h-4 w-4" /></button>
-              <a className="btn-secondary !px-3" href={payUrl} target="_blank" rel="noreferrer"><ExternalLink className="h-4 w-4" /></a>
+              <button className="btn-secondary px-3!" onClick={() => { navigator.clipboard.writeText(payUrl); toast("Link copied", "success"); }}><Copy className="h-4 w-4" /></button>
+              <a className="btn-secondary px-3!" href={payUrl} target="_blank" rel="noreferrer"><ExternalLink className="h-4 w-4" /></a>
             </div>
           </div>
         </div>

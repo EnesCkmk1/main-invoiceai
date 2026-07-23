@@ -67,7 +67,7 @@ function Nav() {
 function Hero() {
   return (
     <section className="relative overflow-hidden bg-grid">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-[500px] bg-gradient-to-b from-brand-50/60 to-transparent dark:from-brand-500/5" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[500px] bg-linear-to-b from-brand-50/60 to-transparent dark:from-brand-500/5" />
       <div className="mx-auto max-w-6xl px-4 pb-20 pt-16 lg:pt-24">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -81,7 +81,7 @@ function Hero() {
           <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-6xl dark:text-white">
             Create invoices in
             <span className="relative whitespace-nowrap">
-              <span className="bg-gradient-to-r from-brand-600 to-sky-500 bg-clip-text text-transparent"> 30 seconds.</span>
+              <span className="bg-linear-to-r from-brand-600 to-sky-500 bg-clip-text text-transparent"> 30 seconds.</span>
             </span>
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-600 dark:text-slate-300">
@@ -260,7 +260,7 @@ function Testimonials() {
               </div>
               <p className="text-slate-700 dark:text-slate-200">"{t.quote}"</p>
               <div className="mt-4 flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-brand-500 to-sky-500 text-xs font-bold text-white">
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-linear-to-br from-brand-500 to-sky-500 text-xs font-bold text-white">
                   {t.name[0]}
                 </div>
                 <div>
@@ -308,7 +308,7 @@ function Faq() {
 function Cta() {
   return (
     <section className="mx-auto max-w-6xl px-4 pb-20">
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-600 to-sky-600 px-8 py-16 text-center shadow-2xl">
+      <div className="relative overflow-hidden rounded-3xl bg-linear-to-br from-brand-600 to-sky-600 px-8 py-16 text-center shadow-2xl">
         <div className="bg-grid absolute inset-0 opacity-10" />
         <div className="relative">
           <h2 className="text-3xl font-bold text-white sm:text-4xl">Send your first invoice today</h2>

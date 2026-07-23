@@ -142,7 +142,7 @@ export default function SettingsPage() {
 
             {tab === "templates" && (
               <div className="space-y-5">
-                <p className="text-sm text-slate-500 dark:text-slate-400">Use <code className="rounded bg-slate-100 px-1 dark:bg-slate-800">{"{number}"}</code>, <code className="rounded bg-slate-100 px-1 dark:bg-slate-800">{"{company}"}</code> and <code className="rounded bg-slate-100 px-1 dark:bg-slate-800">{"{payUrl}"}</code> as placeholders.</p>
+                <p className="text-sm text-slate-500 dark:text-slate-400">Use <code className="rounded-sm bg-slate-100 px-1 dark:bg-slate-800">{"{number}"}</code>, <code className="rounded-sm bg-slate-100 px-1 dark:bg-slate-800">{"{company}"}</code> and <code className="rounded-sm bg-slate-100 px-1 dark:bg-slate-800">{"{payUrl}"}</code> as placeholders.</p>
                 <Field label="Email subject"><input className="input" value={company.emailSubjectTemplate ?? ""} onChange={(e) => update({ emailSubjectTemplate: e.target.value })} placeholder="Invoice {number} from {company}" /></Field>
                 <Field label="Email body (HTML)"><textarea className="input min-h-[160px] font-mono text-xs" value={company.emailBodyTemplate ?? ""} onChange={(e) => update({ emailBodyTemplate: e.target.value })} placeholder="<p>Hi, please find your invoice attached…</p>" /></Field>
               </div>
@@ -150,7 +150,7 @@ export default function SettingsPage() {
 
             {tab === "billing" && billing && (
               <div className="space-y-5">
-                <div className="rounded-2xl border border-brand-200 bg-gradient-to-br from-brand-50 to-sky-50 p-6 dark:border-brand-500/20 dark:from-brand-500/10 dark:to-sky-500/10">
+                <div className="rounded-2xl border border-brand-200 bg-linear-to-br from-brand-50 to-sky-50 p-6 dark:border-brand-500/20 dark:from-brand-500/10 dark:to-sky-500/10">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-semibold uppercase tracking-wide text-brand-600 dark:text-brand-400">InvoiceFlow Pro</p>

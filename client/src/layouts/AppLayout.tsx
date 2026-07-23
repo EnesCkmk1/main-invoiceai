@@ -86,7 +86,7 @@ export function AppLayout() {
       </div>
       <div className="border-t border-slate-200 p-3 dark:border-slate-800">
         <div className="flex items-center gap-3 rounded-xl px-2 py-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-brand-500 to-sky-500 text-sm font-bold text-white">
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-linear-to-br from-brand-500 to-sky-500 text-sm font-bold text-white">
             {user ? initials(user.name) : "?"}
           </div>
           <div className="min-w-0 flex-1">
@@ -119,15 +119,15 @@ export function AppLayout() {
       )}
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-30 flex h-16 items-center justify-between gap-3 border-b border-slate-200 bg-white/80 px-4 backdrop-blur lg:px-8 dark:border-slate-800 dark:bg-slate-900/80">
-          <button className="btn-ghost h-9 w-9 !px-0 lg:hidden" onClick={() => setMobileOpen(true)}>
+        <header className="sticky top-0 z-30 flex h-16 items-center justify-between gap-3 border-b border-slate-200 bg-white/80 px-4 backdrop-blur-sm lg:px-8 dark:border-slate-800 dark:bg-slate-900/80">
+          <button className="btn-ghost h-9 w-9 px-0! lg:hidden" onClick={() => setMobileOpen(true)}>
             <Menu className="h-5 w-5" />
           </button>
           <div className="hidden items-center gap-2 rounded-lg border border-slate-200 px-2 py-1 text-xs text-slate-400 lg:flex dark:border-slate-800">
-            Press <kbd className="rounded bg-slate-100 px-1.5 py-0.5 font-mono dark:bg-slate-800">N</kbd> for new invoice
+            Press <kbd className="rounded-sm bg-slate-100 px-1.5 py-0.5 font-mono dark:bg-slate-800">N</kbd> for new invoice
           </div>
           <div className="flex flex-1 items-center justify-end gap-2">
-            <button className="btn-ghost h-9 w-9 !px-0" onClick={() => setShortcutsOpen(true)} aria-label="Shortcuts">
+            <button className="btn-ghost h-9 w-9 px-0!" onClick={() => setShortcutsOpen(true)} aria-label="Shortcuts">
               <Keyboard className="h-5 w-5" />
             </button>
             <ThemeToggle />
@@ -151,7 +151,7 @@ export function AppLayout() {
           ].map(([key, label]) => (
             <div key={key} className="flex items-center justify-between">
               <span className="text-slate-600 dark:text-slate-300">{label}</span>
-              <kbd className="rounded bg-slate-100 px-2 py-1 font-mono text-xs dark:bg-slate-800">{key}</kbd>
+              <kbd className="rounded-sm bg-slate-100 px-2 py-1 font-mono text-xs dark:bg-slate-800">{key}</kbd>
             </div>
           ))}
         </div>

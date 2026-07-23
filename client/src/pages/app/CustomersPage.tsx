@@ -143,7 +143,7 @@ export default function CustomersPage() {
             <div key={c.id} className="card group p-5 transition hover:shadow-md">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500 to-sky-500 text-sm font-bold text-white">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-linear-to-br from-brand-500 to-sky-500 text-sm font-bold text-white">
                     {initials(c.name)}
                   </div>
                   <div className="min-w-0">

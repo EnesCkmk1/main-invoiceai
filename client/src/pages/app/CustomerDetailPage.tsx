@@ -54,7 +54,7 @@ export default function CustomerDetailPage() {
           {customer.notes && <p className="mt-4 rounded-xl bg-slate-50 p-3 text-sm text-slate-600 dark:bg-slate-800/50 dark:text-slate-300">{customer.notes}</p>}
           <div className="mt-5 flex gap-2">
             <Link to={`/app/invoices/new?customer=${customer.id}`} className="btn-primary flex-1"><Plus className="h-4 w-4" /> New invoice</Link>
-            <button onClick={remove} className="btn-secondary !px-3 text-rose-600"><Trash2 className="h-4 w-4" /></button>
+            <button onClick={remove} className="btn-secondary px-3! text-rose-600"><Trash2 className="h-4 w-4" /></button>
           </div>
         </div>
 

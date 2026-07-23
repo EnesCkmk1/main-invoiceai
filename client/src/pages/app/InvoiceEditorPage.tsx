@@ -239,7 +239,7 @@ export default function InvoiceEditorPage() {
 
       {/* AI prompt */}
       {!isEdit && (
-        <div className="mb-6 rounded-2xl border border-brand-200 bg-gradient-to-br from-brand-50 to-sky-50 p-5 dark:border-brand-500/20 dark:from-brand-500/10 dark:to-sky-500/10">
+        <div className="mb-6 rounded-2xl border border-brand-200 bg-linear-to-br from-brand-50 to-sky-50 p-5 dark:border-brand-500/20 dark:from-brand-500/10 dark:to-sky-500/10">
           <div className="mb-2 flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-brand-500" />
             <h2 className="font-semibold text-slate-900 dark:text-white">Create with AI</h2>
@@ -326,7 +326,7 @@ export default function InvoiceEditorPage() {
                     <div className="flex items-center gap-1">
                       <GripVertical className="hidden h-4 w-4 shrink-0 text-slate-300 sm:block" />
                       <input className="input" placeholder="Description" value={item.description} onChange={(e) => updateItem(index, { description: e.target.value })} />
-                      <button title="Improve with AI" className="btn-ghost !px-2" onClick={() => improveItem(index)}><Wand2 className="h-4 w-4 text-brand-500" /></button>
+                      <button title="Improve with AI" className="btn-ghost px-2!" onClick={() => improveItem(index)}><Wand2 className="h-4 w-4 text-brand-500" /></button>
                     </div>
                   </div>
                   <div className="col-span-4 sm:col-span-2">
@@ -342,7 +342,7 @@ export default function InvoiceEditorPage() {
                     </div>
                   </div>
                   <div className="col-span-1 flex justify-end">
-                    <button className="btn-ghost !px-2 text-slate-400 hover:text-rose-500" onClick={() => setItems((its) => its.filter((_, i) => i !== index))} disabled={items.length === 1}>
+                    <button className="btn-ghost px-2! text-slate-400 hover:text-rose-500" onClick={() => setItems((its) => its.filter((_, i) => i !== index))} disabled={items.length === 1}>
                       <Trash2 className="h-4 w-4" />
                     </button>
                   </div>
