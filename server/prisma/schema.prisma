@@ -1,0 +1,243 @@
+// InvoiceFlow AI - Prisma schema
+// "Not an accounting program — just invoicing."
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  VIEWED
+  PARTIAL
+  PAID
+  OVERDUE
+  CANCELLED
+}
+
+enum InvoiceType {
+  INVOICE
+  CREDIT_NOTE
+}
+
+enum RecurrenceInterval {
+  NONE
+  WEEKLY
+  MONTHLY
+  QUARTERLY
+  YEARLY
+}
+
+enum EventType {
+  CREATED
+  SENT
+  OPENED
+  DOWNLOADED
+  PAID
+  REMINDER_SENT
+}
+
+enum TokenType {
+  MAGIC_LINK
+  PASSWORD_RESET
+  EMAIL_VERIFY
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  name          String
+  passwordHash  String?
+  googleId      String?  @unique
+  avatarUrl     String?
+  emailVerified Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  company   Company? @relation(fields: [companyId], references: [id])
+  companyId String?
+
+  tokens AuthToken[]
+}
+
+model Company {
+  id               String   @id @default(cuid())
+  name             String
+  vatNumber        String? // CVR / VAT
+  email            String?
+  phone            String?
+  address          String?
+  city             String?
+  zip              String?
+  country          String   @default("Denmark")
+  logoUrl          String?
+  brandColor       String   @default("#4f46e5")
+  accentColor      String   @default("#0ea5e9")
+  bankName         String?
+  bankAccount      String?
+  bankIban         String?
+  bankSwift        String?
+  paymentInstructions String?
+  defaultVatRate   Float    @default(25)
+  defaultPaymentTermsDays Int @default(14)
+  defaultCurrency  String   @default("DKK")
+  invoicePrefix    String   @default("INV")
+  nextInvoiceNumber Int     @default(1)
+  emailSubjectTemplate String?
+  emailBodyTemplate    String?
+  invoiceNotes     String?
+  signature        String?
+
+  // Billing (the company's own InvoiceFlow subscription)
+  stripeCustomerId     String?
+  stripeSubscriptionId String?
+  subscriptionStatus   String  @default("trialing")
+  trialEndsAt          DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users     User[]
+  customers Customer[]
+  invoices  Invoice[]
+}
+
+model Customer {
+  id            String   @id @default(cuid())
+  company       Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  companyId     String
+  name          String // company / customer name
+  vatNumber     String?
+  contactPerson String?
+  email         String?
+  phone         String?
+  address       String?
+  city          String?
+  zip           String?
+  country       String   @default("Denmark")
+  paymentTermsDays Int?
+  notes         String?
+  tags          String[] @default([])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  invoices Invoice[]
+
+  @@index([companyId])
+}
+
+model Invoice {
+  id            String        @id @default(cuid())
+  company       Company       @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  companyId     String
+  customer      Customer?     @relation(fields: [customerId], references: [id])
+  customerId    String?
+
+  number        String
+  type          InvoiceType   @default(INVOICE)
+  status        InvoiceStatus @default(DRAFT)
+  currency      String        @default("DKK")
+
+  issueDate     DateTime      @default(now())
+  dueDate       DateTime
+
+  // snapshot of customer at time of issue
+  customerName  String?
+  customerEmail String?
+  customerAddress String?
+  customerVat   String?
+
+  notes         String?
+  footer        String?
+  discountType  String?       // "percent" | "fixed"
+  discountValue Float         @default(0)
+
+  subtotal      Float         @default(0)
+  vatTotal      Float         @default(0)
+  discountTotal Float         @default(0)
+  total         Float         @default(0)
+  amountPaid    Float         @default(0)
+
+  // recurring
+  recurrence    RecurrenceInterval @default(NONE)
+  recurrenceNextAt DateTime?
+
+  // credit note reference
+  creditForId   String?
+
+  // AI provenance
+  createdByAi   Boolean       @default(false)
+  aiPrompt      String?
+
+  // public sharing / tracking
+  publicToken   String        @unique @default(cuid())
+  sentAt        DateTime?
+  viewedAt      DateTime?
+  paidAt        DateTime?
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  items    InvoiceItem[]
+  payments Payment[]
+  events   InvoiceEvent[]
+
+  @@unique([companyId, number])
+  @@index([companyId])
+  @@index([customerId])
+}
+
+model InvoiceItem {
+  id          String  @id @default(cuid())
+  invoice     Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  invoiceId   String
+  description String
+  quantity    Float   @default(1)
+  unitPrice   Float   @default(0)
+  vatRate     Float   @default(25)
+  unit        String? // e.g. "hours", "pcs"
+  position    Int     @default(0)
+  lineTotal   Float   @default(0)
+
+  @@index([invoiceId])
+}
+
+model Payment {
+  id          String   @id @default(cuid())
+  invoice     Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  invoiceId   String
+  amount      Float
+  method      String   @default("card") // card, apple_pay, google_pay, bank_transfer, stripe
+  reference   String?
+  paidAt      DateTime @default(now())
+
+  @@index([invoiceId])
+}
+
+model InvoiceEvent {
+  id        String    @id @default(cuid())
+  invoice   Invoice   @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  invoiceId String
+  type      EventType
+  meta      String?
+  createdAt DateTime  @default(now())
+
+  @@index([invoiceId])
+}
+
+model AuthToken {
+  id        String    @id @default(cuid())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  type      TokenType
+  token     String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+}
