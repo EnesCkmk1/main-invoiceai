@@ -9,6 +9,10 @@ jobs:
   server:
     name: Server (typecheck, build, audit)
     runs-on: ubuntu-latest
+    env:
+      # prisma.config.ts requires the variable to resolve; no DB is contacted
+      # during generate/typecheck/build.
+      DATABASE_URL: postgresql://ci:ci@localhost:5432/ci
     defaults:
       run:
         working-directory: server
