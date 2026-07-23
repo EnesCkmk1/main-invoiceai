@@ -3,8 +3,13 @@ import { env } from "./config/env.js";
 
 const app = createApp();
 
-app.listen(env.port, () => {
-  console.log(`\n  InvoiceFlow AI API running on ${env.apiUrl} (port ${env.port})`);
-  console.log(`  Environment: ${env.nodeEnv}`);
-  console.log(`  App URL:     ${env.appUrl}\n`);
-});
+// On Vercel the platform invokes the exported app; locally we listen ourselves.
+if (!process.env.VERCEL) {
+  app.listen(env.port, () => {
+    console.log(`\n  InvoiceFlow AI API running on ${env.apiUrl} (port ${env.port})`);
+    console.log(`  Environment: ${env.nodeEnv}`);
+    console.log(`  App URL:     ${env.appUrl}\n`);
+  });
+}
+
+export default app;

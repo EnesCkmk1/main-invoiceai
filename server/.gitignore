@@ -2,3 +2,8 @@ node_modules
 dist
 .env
 *.log
+
+public/
+.vercel
+.env*.local
+.env*

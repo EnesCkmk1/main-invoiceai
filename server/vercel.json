@@ -1,0 +1,14 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "express",
+  "installCommand": "npm ci && cd ../client && npm ci",
+  "buildCommand": "npx prisma generate && cd ../client && npm run build && rm -rf ../server/public && mkdir -p ../server/public && cp -r dist/* ../server/public/",
+  "outputDirectory": "public",
+  "functions": {
+    "src/index.ts": {
+      "maxDuration": 30,
+      "memory": 1024,
+      "includeFiles": "{prisma/**,public/**,node_modules/pdfkit/js/data/**}"
+    }
+  }
+}

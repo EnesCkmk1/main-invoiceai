@@ -6,14 +6,18 @@ function optional(key: string, fallback = ""): string {
   return process.env[key] ?? fallback;
 }
 
+// On Vercel, prefer the deployment URL when APP_URL / API_URL aren't set yet
+// (first deploy before custom domain / env are wired).
+const vercelUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "";
+
 export const env = {
   nodeEnv: optional("NODE_ENV", "development"),
   port: parseInt(optional("PORT", "4000"), 10),
   databaseUrl: optional("DATABASE_URL"),
   jwtSecret: optional("JWT_SECRET", "dev-insecure-secret-change-me"),
   jwtExpiresIn: optional("JWT_EXPIRES_IN", "7d"),
-  appUrl: optional("APP_URL", "http://localhost:5173"),
-  apiUrl: optional("API_URL", "http://localhost:4000"),
+  appUrl: optional("APP_URL", vercelUrl || "http://localhost:5173"),
+  apiUrl: optional("API_URL", vercelUrl || "http://localhost:4000"),
 
   // Email (nodemailer). If SMTP is not configured we log to console.
   smtpHost: optional("SMTP_HOST"),

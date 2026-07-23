@@ -1,9 +1,11 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
-import { env } from "./config/env.js";
+import { env, isProd } from "./config/env.js";
 import { errorHandler, notFound } from "./lib/http.js";
 import { stripeWebhook } from "./webhook.js";
 
@@ -32,9 +34,17 @@ export function createApp() {
     })
   );
 
+  // Same-origin on Vercel; allow configured APP_URL (and localhost in non-prod).
+  const allowedOrigins = new Set(
+    [env.appUrl, env.apiUrl, process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : ""]
+      .filter(Boolean)
+  );
   app.use(
     cors({
-      origin: env.appUrl,
+      origin: (origin, cb) => {
+        if (!origin || allowedOrigins.has(origin) || !isProd) return cb(null, true);
+        return cb(null, false);
+      },
       credentials: true,
     })
   );
@@ -87,6 +97,18 @@ export function createApp() {
   app.use("/api/billing", billingRoutes);
 
   app.use("/api", notFound);
+
+  // On Vercel we also serve the built SPA from /public so the whole product
+  // lives on one domain (relative /api calls Just Work).
+  if (process.env.VERCEL || process.env.SERVE_SPA === "1") {
+    const here = path.dirname(fileURLToPath(import.meta.url));
+    const publicDir = path.resolve(here, "../public");
+    app.use(express.static(publicDir, { index: false, maxAge: "1h" }));
+    app.get(/^(?!\/api).*/, (_req, res) => {
+      res.sendFile(path.join(publicDir, "index.html"));
+    });
+  }
+
   app.use(errorHandler);
 
   return app;
