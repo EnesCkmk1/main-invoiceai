@@ -1,12 +1,13 @@
 /**
- * Vercel Express entrypoint (must import `express` directly for detection).
- * Local development still uses `server/src/index.ts` via `npm run dev`.
+ * Vercel Express entrypoint.
+ * Imports the pre-built server (compiled in buildCommand) so Vercel's
+ * bundler does not re-typecheck the whole TypeScript graph with a
+ * different moduleResolution than our local NodeNext config.
  */
 import express from "express";
-import { createApp } from "./server/src/app.js";
+// @ts-expect-error — compiled JS emitted by `npm --prefix server run build`
+import { createApp } from "./server/dist/app.js";
 
-// Keep the express import live so Vercel's framework detector is happy.
 void express;
 
-const app = createApp();
-export default app;
+export default createApp();
