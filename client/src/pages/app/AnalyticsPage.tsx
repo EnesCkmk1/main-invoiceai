@@ -47,7 +47,7 @@ export default function AnalyticsPage() {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Stat icon={<TrendingUp className="h-5 w-5 text-emerald-600" />} label="Total revenue" value={formatMoney(data.totalRevenue, cur)} accent="bg-emerald-100 dark:bg-emerald-500/15" />
         <Stat icon={<Receipt className="h-5 w-5 text-brand-600" />} label="Avg. invoice value" value={formatMoney(data.averageInvoiceValue, cur)} accent="bg-brand-100 dark:bg-brand-500/15" />
-        <Stat icon={<Clock className="h-5 w-5 text-sky-600" />} label="Avg. payment speed" value={`${data.avgPaymentDays} days`} accent="bg-sky-100 dark:bg-sky-500/15" />
+        <Stat icon={<Clock className="h-5 w-5 text-brand-600" />} label="Avg. payment speed" value={`${data.avgPaymentDays} days`} accent="bg-brand-100 dark:bg-brand-500/15" />
         <Stat icon={<AlertTriangle className="h-5 w-5 text-rose-600" />} label="Overdue" value={formatMoney(data.overdueTotal, cur)} accent="bg-rose-100 dark:bg-rose-500/15" />
       </div>
 
