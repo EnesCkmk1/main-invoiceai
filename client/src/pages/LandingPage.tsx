@@ -49,7 +49,7 @@ function Hero() {
   const t = useT();
   return (
     <section className="relative overflow-hidden bg-grid">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-[500px] bg-linear-to-b from-brand-50/60 to-transparent dark:from-brand-500/5" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[480px] bg-linear-to-b from-ink-100/80 to-transparent dark:from-ink-900/50" />
       <div className="mx-auto max-w-6xl px-4 pb-20 pt-16 lg:pt-24">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -57,13 +57,13 @@ function Hero() {
           transition={{ duration: 0.6 }}
           className="mx-auto max-w-3xl text-center"
         >
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-brand-200 bg-brand-50 px-4 py-1.5 text-sm font-medium text-brand-700 dark:border-brand-500/20 dark:bg-brand-500/10 dark:text-brand-300">
-            <Sparkles className="h-4 w-4" /> {t("landing.badge")}
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-ink-200 bg-white px-4 py-1.5 text-sm font-medium text-ink-700 dark:border-ink-700 dark:bg-ink-900 dark:text-ink-300">
+            <Sparkles className="h-4 w-4 text-brand-600" strokeWidth={2} /> {t("landing.badge")}
           </div>
           <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-6xl dark:text-white">
             {t("landing.heroTitle")}
             <span className="relative whitespace-nowrap">
-              <span className="bg-linear-to-r from-brand-600 to-sky-500 bg-clip-text text-transparent">{t("landing.heroHighlight")}</span>
+              <span className="text-brand-600 dark:text-brand-400">{t("landing.heroHighlight")}</span>
             </span>
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-600 dark:text-slate-300">{t("landing.heroSubtitle")}</p>
@@ -95,7 +95,7 @@ function AiDemo() {
   const t = useT();
   const [step, setStep] = useState(0);
   return (
-    <div className="card overflow-hidden p-1.5 shadow-2xl shadow-brand-600/10">
+    <div className="card overflow-hidden p-1 shadow-lg shadow-ink-900/5">
       <div className="rounded-xl bg-slate-50 p-5 dark:bg-slate-950">
         <div className="mb-4 flex items-center gap-2 text-xs font-medium text-slate-400">
           <span className="h-3 w-3 rounded-full bg-rose-400" />
@@ -147,7 +147,7 @@ function VideoDemo() {
         transition={{ duration: 0.6 }}
         className="mx-auto mt-10 max-w-4xl"
       >
-        <div className="card overflow-hidden p-1.5 shadow-2xl shadow-brand-600/10">
+        <div className="card overflow-hidden p-1 shadow-lg shadow-ink-900/5">
           <div className="rounded-xl bg-slate-50 p-3 dark:bg-slate-950">
             <div className="mb-3 flex items-center gap-2 px-2 text-xs font-medium text-slate-400">
               <span className="h-3 w-3 rounded-full bg-rose-400" />
@@ -279,7 +279,7 @@ function Testimonials() {
               </div>
               <p className="text-slate-700 dark:text-slate-200">"{item.quote}"</p>
               <div className="mt-4 flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-linear-to-br from-brand-500 to-sky-500 text-xs font-bold text-white">
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-ink-800 text-xs font-bold text-white dark:bg-ink-700">
                   {item.name[0]}
                 </div>
                 <div>
@@ -334,7 +334,7 @@ function Cta() {
   const t = useT();
   return (
     <section className="mx-auto max-w-6xl px-4 pb-20">
-      <div className="relative overflow-hidden rounded-3xl bg-linear-to-br from-brand-600 to-sky-600 px-8 py-16 text-center shadow-2xl">
+      <div className="relative overflow-hidden rounded-2xl bg-ink-900 px-8 py-16 text-center dark:bg-ink-950">
         <div className="bg-grid absolute inset-0 opacity-10" />
         <div className="relative">
           <h2 className="text-3xl font-bold text-white sm:text-4xl">{t("landing.ctaTitle")}</h2>

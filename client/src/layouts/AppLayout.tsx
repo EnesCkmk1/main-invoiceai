@@ -87,7 +87,7 @@ export function AppLayout() {
       </div>
       <div className="border-t border-slate-200 p-3 dark:border-slate-800">
         <div className="flex items-center gap-3 rounded-xl px-2 py-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-linear-to-br from-brand-500 to-sky-500 text-sm font-bold text-white">
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-600 text-sm font-bold text-white">
             {user ? initials(user.name) : "?"}
           </div>
           <div className="min-w-0 flex-1">

@@ -161,7 +161,7 @@ export default function SettingsPage() {
 
             {tab === "billing" && billing && (
               <div className="space-y-5">
-                <div className="rounded-2xl border border-brand-200 bg-linear-to-br from-brand-50 to-sky-50 p-6 dark:border-brand-500/20 dark:from-brand-500/10 dark:to-sky-500/10">
+                <div className="rounded-xl border border-brand-200/80 bg-brand-50/50 p-6 dark:border-brand-500/20 dark:bg-brand-500/5">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-semibold uppercase tracking-wide text-brand-600 dark:text-brand-400">{t("landing.proName")}</p>

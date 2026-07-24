@@ -248,7 +248,7 @@ export default function InvoiceEditorPage() {
 
       {/* AI prompt */}
       {!isEdit && (
-        <div className="mb-6 rounded-2xl border border-brand-200 bg-linear-to-br from-brand-50 to-sky-50 p-4 sm:p-5 dark:border-brand-500/20 dark:from-brand-500/10 dark:to-sky-500/10">
+        <div className="mb-6 rounded-xl border border-brand-200/80 bg-brand-50/50 p-4 sm:p-5 dark:border-brand-500/20 dark:bg-brand-500/5">
           <div className="mb-2 flex flex-wrap items-center gap-2">
             <Sparkles className="h-5 w-5 shrink-0 text-brand-500" />
             <h2 className="font-semibold text-slate-900 dark:text-white">{t("invoice.createWithAi")}</h2>

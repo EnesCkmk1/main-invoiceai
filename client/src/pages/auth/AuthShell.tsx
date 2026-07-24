@@ -35,16 +35,15 @@ function AuthBrandPanel() {
   const tl = useTL();
   const features = tl("auth.brandFeatures");
   return (
-    <div className="relative hidden w-1/2 overflow-hidden bg-linear-to-br from-brand-600 to-sky-600 lg:block">
-      <div className="bg-grid absolute inset-0 opacity-10" />
+    <div className="relative hidden w-1/2 overflow-hidden border-l border-ink-800 bg-ink-950 lg:block">
       <div className="relative flex h-full flex-col justify-center px-16 text-white">
-        <h2 className="whitespace-pre-line text-4xl font-extrabold leading-tight">{t("auth.brandTitle")}</h2>
-        <p className="mt-4 max-w-md text-lg text-brand-50">{t("auth.brandSubtitle")}</p>
-        <ul className="mt-8 space-y-3">
+        <h2 className="whitespace-pre-line text-4xl font-bold leading-tight">{t("auth.brandTitle")}</h2>
+        <p className="mt-4 max-w-md text-base leading-relaxed text-ink-400">{t("auth.brandSubtitle")}</p>
+        <ul className="mt-10 space-y-3">
           {features.map((f) => (
-            <li key={f} className="flex items-center gap-3 text-brand-50">
-              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20">
-                <Check className="h-4 w-4" />
+            <li key={f} className="flex items-center gap-3 text-ink-300">
+              <span className="flex h-6 w-6 items-center justify-center rounded-md bg-brand-600/20 text-brand-400">
+                <Check className="h-3.5 w-3.5" strokeWidth={2.5} />
               </span>
               {f}
             </li>

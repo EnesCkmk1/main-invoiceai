@@ -75,7 +75,7 @@ model Company {
   zip              String?
   country          String   @default("Denmark")
   logoUrl          String?
-  brandColor       String   @default("#4f46e5")
+  brandColor       String   @default("#0d9488")
   accentColor      String   @default("#0ea5e9")
   bankName         String?
   bankAccount      String?
