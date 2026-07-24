@@ -49,8 +49,8 @@ function Hero() {
   const t = useT();
   return (
     <section className="relative overflow-hidden bg-grid">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-[480px] bg-linear-to-b from-ink-100/80 to-transparent dark:from-ink-900/50" />
-      <div className="mx-auto max-w-6xl px-4 pb-20 pt-16 lg:pt-24">
+      <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-64 bg-linear-to-b from-ink-100/80 to-transparent sm:h-80 lg:h-96 dark:from-ink-900/50" />
+      <div className="relative z-10 mx-auto max-w-6xl px-4 pb-20 pt-16 lg:pt-24">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -325,8 +325,8 @@ function Cta() {
   return (
     <section className="mx-auto max-w-6xl px-4 pb-20">
       <div className="relative overflow-hidden rounded-2xl bg-ink-900 px-8 py-16 text-center dark:bg-ink-950">
-        <div className="bg-grid absolute inset-0 opacity-10" />
-        <div className="relative">
+        <div className="bg-grid absolute inset-0 -z-10 opacity-10" />
+        <div className="relative z-10">
           <h2 className="text-3xl font-bold text-white sm:text-4xl">{t("landing.ctaTitle")}</h2>
           <p className="mx-auto mt-4 max-w-xl text-lg text-brand-50">{t("landing.ctaSubtitle")}</p>
           <Link to="/register" className="mt-8 inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 text-base font-semibold text-brand-700 shadow-lg transition hover:bg-brand-50">
