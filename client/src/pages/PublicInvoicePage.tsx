@@ -87,8 +87,8 @@ export default function PublicInvoicePage() {
     return (
       <div className="flex min-h-screen items-center justify-center px-4 text-center">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">{t("public.notFound")}</h1>
-          <p className="mt-2 text-slate-500">{t("public.notFoundDesc")}</p>
+          <h1 className="text-2xl font-bold text-ink-900 dark:text-white">{t("public.notFound")}</h1>
+          <p className="mt-2 text-ink-500">{t("public.notFoundDesc")}</p>
         </div>
       </div>
     );
@@ -101,7 +101,7 @@ export default function PublicInvoicePage() {
   const amountDue = invoice.total - invoice.amountPaid;
 
   return (
-    <div className="min-h-screen bg-slate-100 py-8 dark:bg-slate-950">
+    <div className="min-h-screen bg-ink-100 py-8 dark:bg-ink-950">
       <div className="mx-auto max-w-2xl px-4">
         <div className="mb-6 flex items-center justify-between">
           <Logo />
@@ -124,25 +124,25 @@ export default function PublicInvoicePage() {
                 {company.logoUrl ? (
                   <img src={company.logoUrl} alt={company.name} className="mb-2 h-10" />
                 ) : (
-                  <div className="mb-1 flex items-center gap-2 text-xl font-bold text-slate-900 dark:text-white">
+                  <div className="mb-1 flex items-center gap-2 text-xl font-bold text-ink-900 dark:text-white">
                     <Building2 className="h-5 w-5" style={{ color: company.brandColor ?? undefined }} /> {company.name}
                   </div>
                 )}
-                {company.vatNumber && <p className="text-sm text-slate-500 dark:text-slate-400">{t("invoice.vat")}: {company.vatNumber}</p>}
+                {company.vatNumber && <p className="text-sm text-ink-500 dark:text-ink-400">{t("invoice.vat")}: {company.vatNumber}</p>}
               </div>
               <div className="text-right">
-                <p className="text-2xl font-extrabold text-slate-900 dark:text-white">{invoice.type === "CREDIT_NOTE" ? t("public.creditNote") : t("public.invoice")}</p>
-                <p className="text-sm text-slate-500 dark:text-slate-400">{invoice.number}</p>
+                <p className="text-2xl font-extrabold text-ink-900 dark:text-white">{invoice.type === "CREDIT_NOTE" ? t("public.creditNote") : t("public.invoice")}</p>
+                <p className="text-sm text-ink-500 dark:text-ink-400">{invoice.number}</p>
               </div>
             </div>
 
             <div className="mt-6 flex justify-between text-sm">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">{t("public.billTo")}</p>
-                <p className="font-medium text-slate-900 dark:text-white">{invoice.customerName}</p>
-                {invoice.customerAddress && <p className="whitespace-pre-line text-slate-500 dark:text-slate-400">{invoice.customerAddress}</p>}
+                <p className="text-xs font-semibold uppercase tracking-wide text-ink-400">{t("public.billTo")}</p>
+                <p className="font-medium text-ink-900 dark:text-white">{invoice.customerName}</p>
+                {invoice.customerAddress && <p className="whitespace-pre-line text-ink-500 dark:text-ink-400">{invoice.customerAddress}</p>}
               </div>
-              <div className="text-right text-slate-500 dark:text-slate-400">
+              <div className="text-right text-ink-500 dark:text-ink-400">
                 <p>{t("public.issued", { date: formatDate(invoice.issueDate, locale) })}</p>
                 <p>{t("public.due", { date: formatDate(invoice.dueDate, locale) })}</p>
               </div>
@@ -150,20 +150,20 @@ export default function PublicInvoicePage() {
 
             <table className="mt-8 w-full text-sm">
               <thead>
-                <tr className="border-b border-slate-200 text-left text-xs uppercase tracking-wide text-slate-400 dark:border-slate-800">
+                <tr className="border-b border-ink-200 text-left text-xs uppercase tracking-wide text-ink-400 dark:border-ink-800">
                   <th className="pb-2">{t("public.description")}</th>
                   <th className="pb-2 text-right">{t("public.qty")}</th>
                   <th className="pb-2 text-right">{t("public.price")}</th>
                   <th className="pb-2 text-right">{t("public.amount")}</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              <tbody className="divide-y divide-ink-100 dark:divide-ink-800">
                 {invoice.items.map((it, i) => (
                   <tr key={i}>
-                    <td className="py-2.5 text-slate-800 dark:text-slate-100">{it.description}</td>
-                    <td className="py-2.5 text-right text-slate-500 dark:text-slate-400">{it.quantity}{it.unit ? ` ${it.unit}` : ""}</td>
-                    <td className="py-2.5 text-right text-slate-500 dark:text-slate-400">{formatMoney(it.unitPrice, invoice.currency)}</td>
-                    <td className="py-2.5 text-right font-medium text-slate-900 dark:text-white">{formatMoney((it.quantity || 0) * (it.unitPrice || 0), invoice.currency)}</td>
+                    <td className="py-2.5 text-ink-800 dark:text-ink-100">{it.description}</td>
+                    <td className="py-2.5 text-right text-ink-500 dark:text-ink-400">{it.quantity}{it.unit ? ` ${it.unit}` : ""}</td>
+                    <td className="py-2.5 text-right text-ink-500 dark:text-ink-400">{formatMoney(it.unitPrice, invoice.currency)}</td>
+                    <td className="py-2.5 text-right font-medium text-ink-900 dark:text-white">{formatMoney((it.quantity || 0) * (it.unitPrice || 0), invoice.currency)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -171,25 +171,25 @@ export default function PublicInvoicePage() {
 
             <div className="mt-6 flex justify-end">
               <dl className="w-full max-w-xs space-y-2 text-sm">
-                <div className="flex justify-between"><dt className="text-slate-500 dark:text-slate-400">{t("public.subtotal")}</dt><dd className="font-medium text-slate-900 dark:text-white">{formatMoney(invoice.subtotal, invoice.currency)}</dd></div>
-                {invoice.discountTotal > 0 && <div className="flex justify-between"><dt className="text-slate-500 dark:text-slate-400">{t("public.discount")}</dt><dd className="font-medium text-rose-500">-{formatMoney(invoice.discountTotal, invoice.currency)}</dd></div>}
-                <div className="flex justify-between"><dt className="text-slate-500 dark:text-slate-400">{t("public.vat")}</dt><dd className="font-medium text-slate-900 dark:text-white">{formatMoney(invoice.vatTotal, invoice.currency)}</dd></div>
-                <div className="flex justify-between border-t border-slate-200 pt-2 text-base font-bold dark:border-slate-800"><dt>{t("public.total")}</dt><dd style={{ color: company.brandColor ?? undefined }}>{formatMoney(invoice.total, invoice.currency)}</dd></div>
+                <div className="flex justify-between"><dt className="text-ink-500 dark:text-ink-400">{t("public.subtotal")}</dt><dd className="font-medium text-ink-900 dark:text-white">{formatMoney(invoice.subtotal, invoice.currency)}</dd></div>
+                {invoice.discountTotal > 0 && <div className="flex justify-between"><dt className="text-ink-500 dark:text-ink-400">{t("public.discount")}</dt><dd className="font-medium text-rose-500">-{formatMoney(invoice.discountTotal, invoice.currency)}</dd></div>}
+                <div className="flex justify-between"><dt className="text-ink-500 dark:text-ink-400">{t("public.vat")}</dt><dd className="font-medium text-ink-900 dark:text-white">{formatMoney(invoice.vatTotal, invoice.currency)}</dd></div>
+                <div className="flex justify-between border-t border-ink-200 pt-2 text-base font-bold dark:border-ink-800"><dt>{t("public.total")}</dt><dd style={{ color: company.brandColor ?? undefined }}>{formatMoney(invoice.total, invoice.currency)}</dd></div>
               </dl>
             </div>
 
             {(company.bankIban || company.bankAccount || company.paymentInstructions) && (
-              <div className="mt-6 rounded-xl bg-slate-50 p-4 text-sm dark:bg-slate-800/50">
-                <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-400">{t("public.paymentDetails")}</p>
-                {company.bankName && <p className="text-slate-600 dark:text-slate-300">{t("public.bank")}: {company.bankName}</p>}
-                {company.bankIban && <p className="text-slate-600 dark:text-slate-300">IBAN: {company.bankIban}</p>}
-                {company.bankAccount && <p className="text-slate-600 dark:text-slate-300">{t("public.account")}: {company.bankAccount}</p>}
-                {company.bankSwift && <p className="text-slate-600 dark:text-slate-300">SWIFT/BIC: {company.bankSwift}</p>}
-                {company.paymentInstructions && <p className="mt-1 text-slate-500 dark:text-slate-400">{company.paymentInstructions}</p>}
+              <div className="mt-6 rounded-xl bg-ink-50 p-4 text-sm dark:bg-ink-800/50">
+                <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-ink-400">{t("public.paymentDetails")}</p>
+                {company.bankName && <p className="text-ink-600 dark:text-ink-300">{t("public.bank")}: {company.bankName}</p>}
+                {company.bankIban && <p className="text-ink-600 dark:text-ink-300">IBAN: {company.bankIban}</p>}
+                {company.bankAccount && <p className="text-ink-600 dark:text-ink-300">{t("public.account")}: {company.bankAccount}</p>}
+                {company.bankSwift && <p className="text-ink-600 dark:text-ink-300">SWIFT/BIC: {company.bankSwift}</p>}
+                {company.paymentInstructions && <p className="mt-1 text-ink-500 dark:text-ink-400">{company.paymentInstructions}</p>}
               </div>
             )}
 
-            {invoice.notes && <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">{invoice.notes}</p>}
+            {invoice.notes && <p className="mt-4 text-sm text-ink-500 dark:text-ink-400">{invoice.notes}</p>}
           </div>
         </div>
 
@@ -202,7 +202,7 @@ export default function PublicInvoicePage() {
           )}
         </div>
 
-        <p className="mt-6 flex items-center justify-center gap-1.5 text-center text-xs text-slate-400">
+        <p className="mt-6 flex items-center justify-center gap-1.5 text-center text-xs text-ink-400">
           <ShieldCheck className="h-3.5 w-3.5" /> {t("public.secured")}{!data.paymentEnabled && ` ${t("public.demoMode")}`}
         </p>
       </div>

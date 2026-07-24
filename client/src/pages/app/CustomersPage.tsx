@@ -124,7 +124,7 @@ export default function CustomersPage() {
       />
 
       <div className="relative mb-4 max-w-md">
-        <Search className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-slate-400" />
+        <Search className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-ink-400" />
         <input className="input pl-10" placeholder="Search by name, email, VAT…" value={q} onChange={(e) => setQ(e.target.value)} />
       </div>
 
@@ -147,24 +147,24 @@ export default function CustomersPage() {
                     {initials(c.name)}
                   </div>
                   <div className="min-w-0">
-                    <Link to={`/app/customers/${c.id}`} className="block truncate font-semibold text-slate-900 hover:text-brand-600 dark:text-white">{c.name}</Link>
-                    {c.contactPerson && <p className="truncate text-xs text-slate-500 dark:text-slate-400">{c.contactPerson}</p>}
+                    <Link to={`/app/customers/${c.id}`} className="block truncate font-semibold text-ink-900 hover:text-brand-600 dark:text-white">{c.name}</Link>
+                    {c.contactPerson && <p className="truncate text-xs text-ink-500 dark:text-ink-400">{c.contactPerson}</p>}
                   </div>
                 </div>
-                <button onClick={() => openEdit(c)} className="text-xs font-medium text-slate-400 opacity-0 transition group-hover:opacity-100 hover:text-brand-600">Edit</button>
+                <button onClick={() => openEdit(c)} className="text-xs font-medium text-ink-400 opacity-0 transition group-hover:opacity-100 hover:text-brand-600">Edit</button>
               </div>
-              <div className="mt-4 space-y-1.5 text-sm text-slate-500 dark:text-slate-400">
+              <div className="mt-4 space-y-1.5 text-sm text-ink-500 dark:text-ink-400">
                 {c.email && <p className="flex items-center gap-2"><Mail className="h-3.5 w-3.5" /> {c.email}</p>}
                 {c.vatNumber && <p className="flex items-center gap-2"><Building2 className="h-3.5 w-3.5" /> {c.vatNumber}</p>}
               </div>
               {c.tags.length > 0 && (
                 <div className="mt-3 flex flex-wrap gap-1.5">
                   {c.tags.map((t) => (
-                    <span key={t} className="badge bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300"><Tag className="h-3 w-3" /> {t}</span>
+                    <span key={t} className="badge bg-ink-100 text-ink-600 dark:bg-ink-800 dark:text-ink-300"><Tag className="h-3 w-3" /> {t}</span>
                   ))}
                 </div>
               )}
-              <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-3 text-xs text-slate-400 dark:border-slate-800">
+              <div className="mt-4 flex items-center justify-between border-t border-ink-100 pt-3 text-xs text-ink-400 dark:border-ink-800">
                 <span>{c._count?.invoices ?? 0} invoice(s)</span>
                 <Link to={`/app/invoices/new?customer=${c.id}`} className="font-medium text-brand-600 hover:underline dark:text-brand-400">New invoice →</Link>
               </div>

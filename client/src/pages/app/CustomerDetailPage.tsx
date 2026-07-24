@@ -33,25 +33,25 @@ export default function CustomerDetailPage() {
 
   return (
     <div className="animate-fade-in">
-      <Link to="/app/customers" className="mb-4 inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-700 dark:text-slate-400"><ArrowLeft className="h-4 w-4" /> Customers</Link>
+      <Link to="/app/customers" className="mb-4 inline-flex items-center gap-1 text-sm font-medium text-ink-500 hover:text-ink-700 dark:text-ink-400"><ArrowLeft className="h-4 w-4" /> Customers</Link>
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="card h-fit p-6">
-          <h1 className="text-xl font-bold text-slate-900 dark:text-white">{customer.name}</h1>
-          {customer.contactPerson && <p className="text-sm text-slate-500 dark:text-slate-400">{customer.contactPerson}</p>}
-          <div className="mt-5 space-y-2.5 text-sm text-slate-600 dark:text-slate-300">
-            {customer.email && <p className="flex items-center gap-2"><Mail className="h-4 w-4 text-slate-400" /> {customer.email}</p>}
-            {customer.phone && <p className="flex items-center gap-2"><Phone className="h-4 w-4 text-slate-400" /> {customer.phone}</p>}
-            {customer.vatNumber && <p className="flex items-center gap-2"><Building2 className="h-4 w-4 text-slate-400" /> {customer.vatNumber}</p>}
+          <h1 className="text-xl font-bold text-ink-900 dark:text-white">{customer.name}</h1>
+          {customer.contactPerson && <p className="text-sm text-ink-500 dark:text-ink-400">{customer.contactPerson}</p>}
+          <div className="mt-5 space-y-2.5 text-sm text-ink-600 dark:text-ink-300">
+            {customer.email && <p className="flex items-center gap-2"><Mail className="h-4 w-4 text-ink-400" /> {customer.email}</p>}
+            {customer.phone && <p className="flex items-center gap-2"><Phone className="h-4 w-4 text-ink-400" /> {customer.phone}</p>}
+            {customer.vatNumber && <p className="flex items-center gap-2"><Building2 className="h-4 w-4 text-ink-400" /> {customer.vatNumber}</p>}
             {(customer.address || customer.city) && (
-              <p className="flex items-start gap-2"><MapPin className="mt-0.5 h-4 w-4 text-slate-400" /> <span>{[customer.address, [customer.zip, customer.city].filter(Boolean).join(" "), customer.country].filter(Boolean).join(", ")}</span></p>
+              <p className="flex items-start gap-2"><MapPin className="mt-0.5 h-4 w-4 text-ink-400" /> <span>{[customer.address, [customer.zip, customer.city].filter(Boolean).join(" "), customer.country].filter(Boolean).join(", ")}</span></p>
             )}
           </div>
           {customer.tags.length > 0 && (
             <div className="mt-4 flex flex-wrap gap-1.5">
-              {customer.tags.map((t) => <span key={t} className="badge bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300">{t}</span>)}
+              {customer.tags.map((t) => <span key={t} className="badge bg-ink-100 text-ink-600 dark:bg-ink-800 dark:text-ink-300">{t}</span>)}
             </div>
           )}
-          {customer.notes && <p className="mt-4 rounded-xl bg-slate-50 p-3 text-sm text-slate-600 dark:bg-slate-800/50 dark:text-slate-300">{customer.notes}</p>}
+          {customer.notes && <p className="mt-4 rounded-xl bg-ink-50 p-3 text-sm text-ink-600 dark:bg-ink-800/50 dark:text-ink-300">{customer.notes}</p>}
           <div className="mt-5 flex gap-2">
             <Link to={`/app/invoices/new?customer=${customer.id}`} className="btn-primary flex-1"><Plus className="h-4 w-4" /> New invoice</Link>
             <button onClick={remove} className="btn-secondary px-3! text-rose-600"><Trash2 className="h-4 w-4" /></button>
@@ -59,21 +59,21 @@ export default function CustomerDetailPage() {
         </div>
 
         <div className="card overflow-hidden lg:col-span-2">
-          <div className="border-b border-slate-200 p-5 dark:border-slate-800">
-            <h3 className="font-semibold text-slate-900 dark:text-white">Invoices</h3>
+          <div className="border-b border-ink-200 p-5 dark:border-ink-800">
+            <h3 className="font-semibold text-ink-900 dark:text-white">Invoices</h3>
           </div>
           {!customer.invoices || customer.invoices.length === 0 ? (
-            <p className="p-8 text-center text-sm text-slate-500 dark:text-slate-400">No invoices for this customer yet.</p>
+            <p className="p-8 text-center text-sm text-ink-500 dark:text-ink-400">No invoices for this customer yet.</p>
           ) : (
-            <div className="divide-y divide-slate-100 dark:divide-slate-800">
+            <div className="divide-y divide-ink-100 dark:divide-ink-800">
               {customer.invoices.map((inv) => (
-                <Link key={inv.id} to={`/app/invoices/${inv.id}`} className="flex items-center justify-between p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                <Link key={inv.id} to={`/app/invoices/${inv.id}`} className="flex items-center justify-between p-4 hover:bg-ink-50 dark:hover:bg-ink-800/50">
                   <div>
-                    <p className="text-sm font-medium text-slate-800 dark:text-slate-100">{inv.number}</p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">{formatDate(inv.issueDate)}</p>
+                    <p className="text-sm font-medium text-ink-800 dark:text-ink-100">{inv.number}</p>
+                    <p className="text-xs text-ink-500 dark:text-ink-400">{formatDate(inv.issueDate)}</p>
                   </div>
                   <div className="flex items-center gap-4">
-                    <span className="text-sm font-semibold text-slate-900 dark:text-white">{formatMoney(inv.total, inv.currency)}</span>
+                    <span className="text-sm font-semibold text-ink-900 dark:text-white">{formatMoney(inv.total, inv.currency)}</span>
                     <StatusBadge status={inv.status} />
                   </div>
                 </Link>

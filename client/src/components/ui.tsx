@@ -9,7 +9,7 @@ export function Spinner({ className = "h-5 w-5" }: { className?: string }) {
 
 export function FullPageSpinner() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-50 dark:bg-slate-950">
+    <div className="flex min-h-screen items-center justify-center bg-ink-50 dark:bg-ink-950">
       <Spinner className="h-8 w-8 text-brand-600" />
     </div>
   );
@@ -47,12 +47,12 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               initial={{ opacity: 0, y: 20, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="pointer-events-auto flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-lg dark:border-slate-700 dark:bg-slate-800"
+              className="pointer-events-auto flex items-center gap-3 rounded-xl border border-ink-200 bg-white px-4 py-3 shadow-lg dark:border-ink-700 dark:bg-ink-800"
             >
               {t.kind === "success" && <CheckCircle2 className="h-5 w-5 text-emerald-500" />}
               {t.kind === "error" && <XCircle className="h-5 w-5 text-rose-500" />}
               {t.kind === "info" && <Info className="h-5 w-5 text-brand-500" />}
-              <span className="text-sm font-medium text-slate-800 dark:text-slate-100">{t.message}</span>
+              <span className="text-sm font-medium text-ink-800 dark:text-ink-100">{t.message}</span>
             </motion.div>
           ))}
         </AnimatePresence>
@@ -91,7 +91,7 @@ export function Modal({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-xs" onClick={onClose} />
+          <div className="absolute inset-0 bg-ink-900/40 backdrop-blur-xs" onClick={onClose} />
           <motion.div
             initial={{ opacity: 0, scale: 0.96, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -101,8 +101,8 @@ export function Modal({
           >
             {title && (
               <div className="mb-4 flex items-center justify-between">
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white">{title}</h3>
-                <button onClick={onClose} className="rounded-lg p-1 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800">
+                <h3 className="text-lg font-bold text-ink-900 dark:text-white">{title}</h3>
+                <button onClick={onClose} className="rounded-lg p-1 text-ink-400 hover:bg-ink-100 dark:hover:bg-ink-800">
                   <X className="h-5 w-5" />
                 </button>
               </div>
@@ -118,12 +118,12 @@ export function Modal({
 // ---- Empty state ----
 export function EmptyState({ icon, title, description, action }: { icon: ReactNode; title: string; description: string; action?: ReactNode }) {
   return (
-    <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200 py-16 text-center dark:border-slate-800">
+    <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-ink-200 py-16 text-center dark:border-ink-800">
       <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400">
         {icon}
       </div>
-      <h3 className="text-lg font-semibold text-slate-900 dark:text-white">{title}</h3>
-      <p className="mt-1 max-w-sm text-sm text-slate-500 dark:text-slate-400">{description}</p>
+      <h3 className="text-lg font-semibold text-ink-900 dark:text-white">{title}</h3>
+      <p className="mt-1 max-w-sm text-sm text-ink-500 dark:text-ink-400">{description}</p>
       {action && <div className="mt-5">{action}</div>}
     </div>
   );

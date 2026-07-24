@@ -39,21 +39,21 @@ export default function RegisterPage() {
         <div>
           <label className="label">{t("auth.fullName")}</label>
           <div className="relative">
-            <UserIcon className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-slate-400" />
+            <UserIcon className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-ink-400" />
             <input className="input pl-10" value={name} onChange={(e) => setName(e.target.value)} required placeholder="Jane Doe" />
           </div>
         </div>
         <div>
           <label className="label">{t("auth.email")}</label>
           <div className="relative">
-            <Mail className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-slate-400" />
+            <Mail className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-ink-400" />
             <input className="input pl-10" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="you@company.com" />
           </div>
         </div>
         <div>
           <label className="label">{t("auth.password")}</label>
           <div className="relative">
-            <Lock className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-slate-400" />
+            <Lock className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-ink-400" />
             <input className="input pl-10" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={8} placeholder="At least 8 characters" />
           </div>
         </div>
@@ -62,8 +62,8 @@ export default function RegisterPage() {
         </button>
       </form>
 
-      <div className="my-6 flex items-center gap-3 text-xs text-slate-400">
-        <span className="h-px flex-1 bg-slate-200 dark:bg-slate-800" /> {t("common.or")} <span className="h-px flex-1 bg-slate-200 dark:bg-slate-800" />
+      <div className="my-6 flex items-center gap-3 text-xs text-ink-400">
+        <span className="h-px flex-1 bg-ink-200 dark:bg-ink-800" /> {t("common.or")} <span className="h-px flex-1 bg-ink-200 dark:bg-ink-800" />
       </div>
       <GoogleButton onClick={() => toast(t("auth.googleHint"), "info")} />
 

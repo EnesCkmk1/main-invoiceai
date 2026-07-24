@@ -58,7 +58,7 @@ export default function InvoicesPage() {
               key={f.value}
               onClick={() => setStatus(f.value)}
               className={`rounded-lg px-3 py-1.5 text-sm font-medium transition ${
-                status === f.value ? "bg-brand-600 text-white" : "bg-white text-slate-600 hover:bg-slate-100 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
+                status === f.value ? "bg-brand-600 text-white" : "bg-white text-ink-600 hover:bg-ink-100 dark:bg-ink-900 dark:text-ink-300 dark:hover:bg-ink-800"
               }`}
             >
               {f.label}
@@ -66,7 +66,7 @@ export default function InvoicesPage() {
           ))}
         </div>
         <div className="relative max-w-xs flex-1">
-          <Search className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-slate-400" />
+          <Search className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-ink-400" />
           <input className="input pl-10" placeholder={t("invoices.search")} value={q} onChange={(e) => setQ(e.target.value)} />
         </div>
       </div>
@@ -82,7 +82,7 @@ export default function InvoicesPage() {
         />
       ) : (
         <div className="card overflow-hidden">
-          <div className="hidden grid-cols-12 gap-4 border-b border-slate-200 px-5 py-3 text-xs font-semibold uppercase tracking-wide text-slate-400 sm:grid dark:border-slate-800">
+          <div className="hidden grid-cols-12 gap-4 border-b border-ink-200 px-5 py-3 text-xs font-semibold uppercase tracking-wide text-ink-400 sm:grid dark:border-ink-800">
             <div className="col-span-3">{t("invoices.colInvoice")}</div>
             <div className="col-span-3">{t("invoices.colCustomer")}</div>
             <div className="col-span-2">{t("invoices.colIssued")}</div>
@@ -90,22 +90,22 @@ export default function InvoicesPage() {
             <div className="col-span-1 text-right">{t("invoices.colTotal")}</div>
             <div className="col-span-1 text-right">{t("invoices.colStatus")}</div>
           </div>
-          <div className="divide-y divide-slate-100 dark:divide-slate-800">
+          <div className="divide-y divide-ink-100 dark:divide-ink-800">
             {invoices.map((inv) => (
               <Link
                 key={inv.id}
                 to={`/app/invoices/${inv.id}`}
-                className="grid grid-cols-2 gap-2 p-4 hover:bg-slate-50 sm:grid-cols-12 sm:gap-4 sm:px-5 dark:hover:bg-slate-800/50"
+                className="grid grid-cols-2 gap-2 p-4 hover:bg-ink-50 sm:grid-cols-12 sm:gap-4 sm:px-5 dark:hover:bg-ink-800/50"
               >
                 <div className="col-span-3 flex items-center gap-2">
                   {inv.createdByAi && <Sparkles className="h-3.5 w-3.5 shrink-0 text-brand-500" />}
-                  <span className="font-medium text-slate-800 dark:text-slate-100">{inv.number}</span>
-                  {inv.type === "CREDIT_NOTE" && <span className="badge bg-slate-100 text-slate-500 dark:bg-slate-800">{t("invoices.credit")}</span>}
+                  <span className="font-medium text-ink-800 dark:text-ink-100">{inv.number}</span>
+                  {inv.type === "CREDIT_NOTE" && <span className="badge bg-ink-100 text-ink-500 dark:bg-ink-800">{t("invoices.credit")}</span>}
                 </div>
-                <div className="col-span-3 truncate text-sm text-slate-600 dark:text-slate-300">{inv.customer?.name ?? inv.customerName ?? "—"}</div>
-                <div className="col-span-2 hidden text-sm text-slate-500 sm:block dark:text-slate-400">{formatDate(inv.issueDate, locale)}</div>
-                <div className="col-span-2 hidden text-sm text-slate-500 sm:block dark:text-slate-400">{formatDate(inv.dueDate, locale)}</div>
-                <div className="col-span-1 text-right text-sm font-semibold text-slate-900 dark:text-white">{formatMoney(inv.total, inv.currency)}</div>
+                <div className="col-span-3 truncate text-sm text-ink-600 dark:text-ink-300">{inv.customer?.name ?? inv.customerName ?? "—"}</div>
+                <div className="col-span-2 hidden text-sm text-ink-500 sm:block dark:text-ink-400">{formatDate(inv.issueDate, locale)}</div>
+                <div className="col-span-2 hidden text-sm text-ink-500 sm:block dark:text-ink-400">{formatDate(inv.dueDate, locale)}</div>
+                <div className="col-span-1 text-right text-sm font-semibold text-ink-900 dark:text-white">{formatMoney(inv.total, inv.currency)}</div>
                 <div className="col-span-1 flex justify-end"><StatusBadge status={inv.status as InvoiceStatus} /></div>
               </Link>
             ))}

@@ -42,7 +42,7 @@ export default function ResetPasswordPage() {
           <div>
             <label className="label">New password</label>
             <div className="relative">
-              <Lock className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-slate-400" />
+              <Lock className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-ink-400" />
               <input className="input pl-10" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={8} placeholder="At least 8 characters" />
             </div>
           </div>

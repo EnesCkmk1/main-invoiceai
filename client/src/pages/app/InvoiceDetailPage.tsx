@@ -93,11 +93,11 @@ export default function InvoiceDetailPage() {
 
   return (
     <div className="animate-fade-in">
-      <Link to="/app/invoices" className="mb-4 inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-700 dark:text-slate-400"><ArrowLeft className="h-4 w-4" /> {t("invoice.back")}</Link>
+      <Link to="/app/invoices" className="mb-4 inline-flex items-center gap-1 text-sm font-medium text-ink-500 hover:text-ink-700 dark:text-ink-400"><ArrowLeft className="h-4 w-4" /> {t("invoice.back")}</Link>
 
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">{invoice.number}</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-ink-900 dark:text-white">{invoice.number}</h1>
           <StatusBadge status={invoice.status} />
           {invoice.createdByAi && <span className="badge bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-300"><Sparkles className="h-3 w-3" /> AI</span>}
         </div>
@@ -114,20 +114,20 @@ export default function InvoiceDetailPage() {
           <div className="card p-8">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">{t("invoice.billTo")}</p>
-                <p className="mt-1 font-semibold text-slate-900 dark:text-white">{invoice.customerName ?? "—"}</p>
-                {invoice.customerAddress && <p className="whitespace-pre-line text-sm text-slate-500 dark:text-slate-400">{invoice.customerAddress}</p>}
-                {invoice.customerVat && <p className="text-sm text-slate-500 dark:text-slate-400">VAT: {invoice.customerVat}</p>}
+                <p className="text-xs font-semibold uppercase tracking-wide text-ink-400">{t("invoice.billTo")}</p>
+                <p className="mt-1 font-semibold text-ink-900 dark:text-white">{invoice.customerName ?? "—"}</p>
+                {invoice.customerAddress && <p className="whitespace-pre-line text-sm text-ink-500 dark:text-ink-400">{invoice.customerAddress}</p>}
+                {invoice.customerVat && <p className="text-sm text-ink-500 dark:text-ink-400">VAT: {invoice.customerVat}</p>}
               </div>
               <div className="text-right text-sm">
-                <p className="text-slate-500 dark:text-slate-400">{t("invoice.issued", { date: formatDate(invoice.issueDate, locale) })}</p>
-                <p className="text-slate-500 dark:text-slate-400">{t("invoice.due", { date: formatDate(invoice.dueDate, locale) })}</p>
+                <p className="text-ink-500 dark:text-ink-400">{t("invoice.issued", { date: formatDate(invoice.issueDate, locale) })}</p>
+                <p className="text-ink-500 dark:text-ink-400">{t("invoice.due", { date: formatDate(invoice.dueDate, locale) })}</p>
               </div>
             </div>
 
             <table className="mt-8 w-full text-sm">
               <thead>
-                <tr className="border-b border-slate-200 text-left text-xs uppercase tracking-wide text-slate-400 dark:border-slate-800">
+                <tr className="border-b border-ink-200 text-left text-xs uppercase tracking-wide text-ink-400 dark:border-ink-800">
                   <th className="pb-2">{t("invoice.description")}</th>
                   <th className="pb-2 text-right">{t("invoice.qty")}</th>
                   <th className="pb-2 text-right">{t("invoice.price")}</th>
@@ -135,14 +135,14 @@ export default function InvoiceDetailPage() {
                   <th className="pb-2 text-right">{t("invoice.amount")}</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              <tbody className="divide-y divide-ink-100 dark:divide-ink-800">
                 {invoice.items.map((it, i) => (
                   <tr key={i}>
-                    <td className="py-2.5 text-slate-800 dark:text-slate-100">{it.description}</td>
-                    <td className="py-2.5 text-right text-slate-500 dark:text-slate-400">{it.quantity}{it.unit ? ` ${it.unit}` : ""}</td>
-                    <td className="py-2.5 text-right text-slate-500 dark:text-slate-400">{formatMoney(it.unitPrice, invoice.currency)}</td>
-                    <td className="py-2.5 text-right text-slate-500 dark:text-slate-400">{it.vatRate}%</td>
-                    <td className="py-2.5 text-right font-medium text-slate-900 dark:text-white">{formatMoney((it.quantity || 0) * (it.unitPrice || 0), invoice.currency)}</td>
+                    <td className="py-2.5 text-ink-800 dark:text-ink-100">{it.description}</td>
+                    <td className="py-2.5 text-right text-ink-500 dark:text-ink-400">{it.quantity}{it.unit ? ` ${it.unit}` : ""}</td>
+                    <td className="py-2.5 text-right text-ink-500 dark:text-ink-400">{formatMoney(it.unitPrice, invoice.currency)}</td>
+                    <td className="py-2.5 text-right text-ink-500 dark:text-ink-400">{it.vatRate}%</td>
+                    <td className="py-2.5 text-right font-medium text-ink-900 dark:text-white">{formatMoney((it.quantity || 0) * (it.unitPrice || 0), invoice.currency)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -150,22 +150,22 @@ export default function InvoiceDetailPage() {
 
             <div className="mt-6 flex justify-end">
               <dl className="w-full max-w-xs space-y-2 text-sm">
-                <div className="flex justify-between"><dt className="text-slate-500 dark:text-slate-400">{t("invoice.subtotal")}</dt><dd className="font-medium text-slate-900 dark:text-white">{formatMoney(invoice.subtotal, invoice.currency)}</dd></div>
-                {invoice.discountTotal > 0 && <div className="flex justify-between"><dt className="text-slate-500 dark:text-slate-400">{t("invoice.discount")}</dt><dd className="font-medium text-rose-500">-{formatMoney(invoice.discountTotal, invoice.currency)}</dd></div>}
-                <div className="flex justify-between"><dt className="text-slate-500 dark:text-slate-400">{t("invoice.vat")}</dt><dd className="font-medium text-slate-900 dark:text-white">{formatMoney(invoice.vatTotal, invoice.currency)}</dd></div>
-                <div className="flex justify-between border-t border-slate-200 pt-2 text-base font-bold dark:border-slate-800"><dt>{t("invoice.total")}</dt><dd className="text-brand-600 dark:text-brand-400">{formatMoney(invoice.total, invoice.currency)}</dd></div>
+                <div className="flex justify-between"><dt className="text-ink-500 dark:text-ink-400">{t("invoice.subtotal")}</dt><dd className="font-medium text-ink-900 dark:text-white">{formatMoney(invoice.subtotal, invoice.currency)}</dd></div>
+                {invoice.discountTotal > 0 && <div className="flex justify-between"><dt className="text-ink-500 dark:text-ink-400">{t("invoice.discount")}</dt><dd className="font-medium text-rose-500">-{formatMoney(invoice.discountTotal, invoice.currency)}</dd></div>}
+                <div className="flex justify-between"><dt className="text-ink-500 dark:text-ink-400">{t("invoice.vat")}</dt><dd className="font-medium text-ink-900 dark:text-white">{formatMoney(invoice.vatTotal, invoice.currency)}</dd></div>
+                <div className="flex justify-between border-t border-ink-200 pt-2 text-base font-bold dark:border-ink-800"><dt>{t("invoice.total")}</dt><dd className="text-brand-600 dark:text-brand-400">{formatMoney(invoice.total, invoice.currency)}</dd></div>
                 {invoice.amountPaid > 0 && invoice.status !== "PAID" && <div className="flex justify-between text-emerald-600"><dt>{t("invoice.paid")}</dt><dd>{formatMoney(invoice.amountPaid, invoice.currency)}</dd></div>}
               </dl>
             </div>
 
-            {invoice.notes && <p className="mt-6 border-t border-slate-100 pt-4 text-sm text-slate-500 dark:border-slate-800 dark:text-slate-400">{invoice.notes}</p>}
+            {invoice.notes && <p className="mt-6 border-t border-ink-100 pt-4 text-sm text-ink-500 dark:border-ink-800 dark:text-ink-400">{invoice.notes}</p>}
           </div>
 
           {/* Public link */}
           <div className="card mt-4 flex items-center justify-between p-4">
             <div className="min-w-0">
-              <p className="text-xs font-medium text-slate-400">{t("invoice.publicLink")}</p>
-              <p className="truncate text-sm text-slate-600 dark:text-slate-300">{payUrl}</p>
+              <p className="text-xs font-medium text-ink-400">{t("invoice.publicLink")}</p>
+              <p className="truncate text-sm text-ink-600 dark:text-ink-300">{payUrl}</p>
             </div>
             <div className="flex gap-2">
               <button className="btn-secondary px-3!" onClick={() => { navigator.clipboard.writeText(payUrl); toast(t("invoice.linkCopied"), "success"); }}><Copy className="h-4 w-4" /></button>
@@ -177,7 +177,7 @@ export default function InvoiceDetailPage() {
         {/* Actions + timeline */}
         <div className="space-y-6">
           <div className="card p-6">
-            <h3 className="mb-4 font-semibold text-slate-900 dark:text-white">{t("invoice.actions")}</h3>
+            <h3 className="mb-4 font-semibold text-ink-900 dark:text-white">{t("invoice.actions")}</h3>
             <div className="grid grid-cols-2 gap-2">
               {invoice.status !== "PAID" && (
                 <button className="btn-secondary col-span-2" disabled={busy} onClick={() => action(() => api.post(`/invoices/${id}/mark-paid`, {}), t("invoice.markedPaid"))}><Check className="h-4 w-4" /> {t("invoice.markPaid")}</button>
@@ -192,7 +192,7 @@ export default function InvoiceDetailPage() {
           </div>
 
           <div className="card p-6">
-            <h3 className="mb-4 font-semibold text-slate-900 dark:text-white">{t("invoice.activity")}</h3>
+            <h3 className="mb-4 font-semibold text-ink-900 dark:text-white">{t("invoice.activity")}</h3>
             <ol className="space-y-4">
               {(invoice.events ?? []).map((ev) => (
                 <li key={ev.id} className="flex gap-3">
@@ -200,12 +200,12 @@ export default function InvoiceDetailPage() {
                     {EVENT_ICON[ev.type] ?? <Clock className="h-4 w-4" />}
                   </span>
                   <div>
-                    <p className="text-sm font-medium capitalize text-slate-800 dark:text-slate-100">{ev.type.toLowerCase().replace("_", " ")}</p>
-                    <p className="text-xs text-slate-400">{new Date(ev.createdAt).toLocaleString()}{ev.meta ? ` · ${ev.meta}` : ""}</p>
+                    <p className="text-sm font-medium capitalize text-ink-800 dark:text-ink-100">{ev.type.toLowerCase().replace("_", " ")}</p>
+                    <p className="text-xs text-ink-400">{new Date(ev.createdAt).toLocaleString()}{ev.meta ? ` · ${ev.meta}` : ""}</p>
                   </div>
                 </li>
               ))}
-              {(!invoice.events || invoice.events.length === 0) && <p className="text-sm text-slate-400">{t("invoice.noActivity")}</p>}
+              {(!invoice.events || invoice.events.length === 0) && <p className="text-sm text-ink-400">{t("invoice.noActivity")}</p>}
             </ol>
           </div>
         </div>

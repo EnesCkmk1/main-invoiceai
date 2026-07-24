@@ -21,10 +21,10 @@ function Stat({ icon, label, value, accent }: { icon: React.ReactNode; label: st
   return (
     <div className="card p-5">
       <div className="flex items-center justify-between">
-        <span className="text-sm font-medium text-slate-500 dark:text-slate-400">{label}</span>
+        <span className="text-sm font-medium text-ink-500 dark:text-ink-400">{label}</span>
         <span className={`flex h-9 w-9 items-center justify-center rounded-xl ${accent}`}>{icon}</span>
       </div>
-      <p className="mt-3 text-2xl font-bold text-slate-900 dark:text-white">{value}</p>
+      <p className="mt-3 text-2xl font-bold text-ink-900 dark:text-white">{value}</p>
     </div>
   );
 }
@@ -53,7 +53,7 @@ export default function AnalyticsPage() {
 
       <div className="mt-6 grid gap-6 lg:grid-cols-3">
         <div className="card p-6 lg:col-span-2">
-          <h3 className="mb-4 font-semibold text-slate-900 dark:text-white">Monthly revenue (12 months)</h3>
+          <h3 className="mb-4 font-semibold text-ink-900 dark:text-white">Monthly revenue (12 months)</h3>
           <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={data.monthly}>
@@ -67,21 +67,21 @@ export default function AnalyticsPage() {
         </div>
 
         <div className="card p-6">
-          <h3 className="mb-4 flex items-center gap-2 font-semibold text-slate-900 dark:text-white"><Crown className="h-4 w-4 text-amber-500" /> Best customers</h3>
+          <h3 className="mb-4 flex items-center gap-2 font-semibold text-ink-900 dark:text-white"><Crown className="h-4 w-4 text-amber-500" /> Best customers</h3>
           {data.topCustomers.length === 0 ? (
-            <p className="text-sm text-slate-400">No paid invoices yet.</p>
+            <p className="text-sm text-ink-400">No paid invoices yet.</p>
           ) : (
             <ul className="space-y-3">
               {data.topCustomers.map((c, i) => (
                 <li key={i} className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-xs font-bold text-slate-500 dark:bg-slate-800 dark:text-slate-300">{i + 1}</span>
+                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-ink-100 text-xs font-bold text-ink-500 dark:bg-ink-800 dark:text-ink-300">{i + 1}</span>
                     <div>
-                      <p className="text-sm font-medium text-slate-800 dark:text-slate-100">{c.name}</p>
-                      <p className="text-xs text-slate-400">{c.count} invoice(s)</p>
+                      <p className="text-sm font-medium text-ink-800 dark:text-ink-100">{c.name}</p>
+                      <p className="text-xs text-ink-400">{c.count} invoice(s)</p>
                     </div>
                   </div>
-                  <span className="text-sm font-semibold text-slate-900 dark:text-white">{formatMoney(c.total, cur)}</span>
+                  <span className="text-sm font-semibold text-ink-900 dark:text-white">{formatMoney(c.total, cur)}</span>
                 </li>
               ))}
             </ul>
@@ -90,18 +90,18 @@ export default function AnalyticsPage() {
       </div>
 
       <div className="card mt-6 overflow-hidden">
-        <div className="border-b border-slate-200 p-5 dark:border-slate-800">
-          <h3 className="font-semibold text-slate-900 dark:text-white">Overdue invoices</h3>
+        <div className="border-b border-ink-200 p-5 dark:border-ink-800">
+          <h3 className="font-semibold text-ink-900 dark:text-white">Overdue invoices</h3>
         </div>
         {data.overdue.length === 0 ? (
-          <p className="p-8 text-center text-sm text-slate-500 dark:text-slate-400">Nothing overdue. You're all caught up.</p>
+          <p className="p-8 text-center text-sm text-ink-500 dark:text-ink-400">Nothing overdue. You're all caught up.</p>
         ) : (
-          <div className="divide-y divide-slate-100 dark:divide-slate-800">
+          <div className="divide-y divide-ink-100 dark:divide-ink-800">
             {data.overdue.map((o) => (
-              <a key={o.id} href={`/app/invoices/${o.id}`} className="flex items-center justify-between p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50">
+              <a key={o.id} href={`/app/invoices/${o.id}`} className="flex items-center justify-between p-4 hover:bg-ink-50 dark:hover:bg-ink-800/50">
                 <div>
-                  <p className="text-sm font-medium text-slate-800 dark:text-slate-100">{o.number}</p>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">{o.customer} · due {new Date(o.dueDate).toLocaleDateString()}</p>
+                  <p className="text-sm font-medium text-ink-800 dark:text-ink-100">{o.number}</p>
+                  <p className="text-xs text-ink-500 dark:text-ink-400">{o.customer} · due {new Date(o.dueDate).toLocaleDateString()}</p>
                 </div>
                 <span className="text-sm font-semibold text-rose-600">{formatMoney(o.total, cur)}</span>
               </a>

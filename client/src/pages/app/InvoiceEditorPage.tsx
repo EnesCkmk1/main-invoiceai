@@ -239,11 +239,11 @@ export default function InvoiceEditorPage() {
 
   return (
     <div className="animate-fade-in pb-36 lg:pb-0">
-      <Link to="/app/invoices" className="mb-4 inline-flex min-h-11 items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-700 dark:text-slate-400">
+      <Link to="/app/invoices" className="mb-4 inline-flex min-h-11 items-center gap-1 text-sm font-medium text-ink-500 hover:text-ink-700 dark:text-ink-400">
         <ArrowLeft className="h-4 w-4" /> {t("invoice.back")}
       </Link>
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl dark:text-white">{isEdit ? t("invoice.edit") : t("invoice.new")}</h1>
+        <h1 className="text-xl font-bold tracking-tight text-ink-900 sm:text-2xl dark:text-white">{isEdit ? t("invoice.edit") : t("invoice.new")}</h1>
       </div>
 
       {/* AI prompt */}
@@ -251,10 +251,10 @@ export default function InvoiceEditorPage() {
         <div className="mb-6 rounded-xl border border-brand-200/80 bg-brand-50/50 p-4 sm:p-5 dark:border-brand-500/20 dark:bg-brand-500/5">
           <div className="mb-2 flex flex-wrap items-center gap-2">
             <Sparkles className="h-5 w-5 shrink-0 text-brand-500" />
-            <h2 className="font-semibold text-slate-900 dark:text-white">{t("invoice.createWithAi")}</h2>
-            <span className="badge bg-white/70 text-brand-700 dark:bg-slate-900/50 dark:text-brand-300">{aiEnabled ? "beta" : "offline engine"}</span>
+            <h2 className="font-semibold text-ink-900 dark:text-white">{t("invoice.createWithAi")}</h2>
+            <span className="badge bg-white/70 text-brand-700 dark:bg-ink-900/50 dark:text-brand-300">{aiEnabled ? "beta" : "offline engine"}</span>
           </div>
-          <p className="mb-3 text-sm text-slate-600 dark:text-slate-300">{t("invoice.aiDesc")}</p>
+          <p className="mb-3 text-sm text-ink-600 dark:text-ink-300">{t("invoice.aiDesc")}</p>
           <div className="flex flex-col gap-2 sm:flex-row">
             <textarea
               className="input min-h-[72px] flex-1 sm:min-h-[52px]"
@@ -270,11 +270,11 @@ export default function InvoiceEditorPage() {
           {assumptions.length > 0 && (
             <ul className="mt-3 space-y-1">
               {assumptions.map((a, i) => (
-                <li key={i} className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400"><Info className="h-3 w-3" /> {a}</li>
+                <li key={i} className="flex items-center gap-1.5 text-xs text-ink-500 dark:text-ink-400"><Info className="h-3 w-3" /> {a}</li>
               ))}
             </ul>
           )}
-          {aiSource && <p className="mt-2 text-xs text-slate-400">Engine: {aiSource === "ai" ? "AI + rules" : "rule-based (no API key needed)"}</p>}
+          {aiSource && <p className="mt-2 text-xs text-ink-400">Engine: {aiSource === "ai" ? "AI + rules" : "rule-based (no API key needed)"}</p>}
         </div>
       )}
 
@@ -325,14 +325,14 @@ export default function InvoiceEditorPage() {
           {/* Line items */}
           <div className="card p-4 sm:p-6">
             <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-              <h3 className="font-semibold text-slate-900 dark:text-white">{t("invoice.lineItems")}</h3>
+              <h3 className="font-semibold text-ink-900 dark:text-white">{t("invoice.lineItems")}</h3>
               <button className="btn-secondary min-h-11" onClick={() => setItems((i) => [...i, emptyItem(defaultVat)])}><Plus className="h-4 w-4" /> {t("invoice.addLine")}</button>
             </div>
             <div className="space-y-3">
               {items.map((item, index) => (
-                <div key={item._id} className="rounded-xl border border-slate-100 p-3 dark:border-slate-800">
+                <div key={item._id} className="rounded-xl border border-ink-100 p-3 dark:border-ink-800">
                   <div className="flex items-start gap-1">
-                    <GripVertical className="mt-2.5 hidden h-4 w-4 shrink-0 text-slate-300 md:block" />
+                    <GripVertical className="mt-2.5 hidden h-4 w-4 shrink-0 text-ink-300 md:block" />
                     <div className="min-w-0 flex-1">
                       <label className="label md:sr-only">Description</label>
                       <div className="flex items-center gap-1">
@@ -340,7 +340,7 @@ export default function InvoiceEditorPage() {
                         <button title="Improve with AI" className="btn-ghost min-h-11 min-w-11 shrink-0 px-2!" onClick={() => improveItem(index)}><Wand2 className="h-4 w-4 text-brand-500" /></button>
                       </div>
                     </div>
-                    <button className="btn-ghost min-h-11 min-w-11 shrink-0 px-2! text-slate-400 hover:text-rose-500 md:hidden" onClick={() => setItems((its) => its.filter((_, i) => i !== index))} disabled={items.length === 1} aria-label="Remove line">
+                    <button className="btn-ghost min-h-11 min-w-11 shrink-0 px-2! text-ink-400 hover:text-rose-500 md:hidden" onClick={() => setItems((its) => its.filter((_, i) => i !== index))} disabled={items.length === 1} aria-label="Remove line">
                       <Trash2 className="h-4 w-4" />
                     </button>
                   </div>
@@ -357,16 +357,16 @@ export default function InvoiceEditorPage() {
                       <label className="label md:sr-only">VAT %</label>
                       <div className="relative">
                         <input className="input pr-6" type="number" step="0.1" placeholder="VAT" value={item.vatRate} onChange={(e) => updateItem(index, { vatRate: Number(e.target.value) })} />
-                        <span className="pointer-events-none absolute right-2 top-2.5 text-xs text-slate-400">%</span>
+                        <span className="pointer-events-none absolute right-2 top-2.5 text-xs text-ink-400">%</span>
                       </div>
                     </div>
                     <div className="hidden justify-end md:col-span-1 md:flex">
-                      <button className="btn-ghost min-h-11 min-w-11 px-2! text-slate-400 hover:text-rose-500" onClick={() => setItems((its) => its.filter((_, i) => i !== index))} disabled={items.length === 1} aria-label="Remove line">
+                      <button className="btn-ghost min-h-11 min-w-11 px-2! text-ink-400 hover:text-rose-500" onClick={() => setItems((its) => its.filter((_, i) => i !== index))} disabled={items.length === 1} aria-label="Remove line">
                         <Trash2 className="h-4 w-4" />
                       </button>
                     </div>
                   </div>
-                  <div className="mt-2 text-right text-xs text-slate-400 md:pl-6">
+                  <div className="mt-2 text-right text-xs text-ink-400 md:pl-6">
                     Line total: {formatMoney((item.quantity || 0) * (item.unitPrice || 0), currency)}
                   </div>
                 </div>
@@ -399,17 +399,17 @@ export default function InvoiceEditorPage() {
         {/* Summary sidebar */}
         <div className="space-y-6">
           <div className="card p-4 sm:p-6 lg:sticky lg:top-20">
-            <h3 className="mb-4 font-semibold text-slate-900 dark:text-white">{t("invoice.summary")}</h3>
+            <h3 className="mb-4 font-semibold text-ink-900 dark:text-white">{t("invoice.summary")}</h3>
             <dl className="space-y-2 text-sm">
-              <div className="flex justify-between gap-4"><dt className="text-slate-500 dark:text-slate-400">{t("invoice.subtotal")}</dt><dd className="font-medium text-slate-900 dark:text-white">{formatMoney(totals.subtotal, currency)}</dd></div>
-              {totals.discountTotal > 0 && <div className="flex justify-between gap-4"><dt className="text-slate-500 dark:text-slate-400">{t("invoice.discount")}</dt><dd className="font-medium text-rose-500">-{formatMoney(totals.discountTotal, currency)}</dd></div>}
-              <div className="flex justify-between gap-4"><dt className="text-slate-500 dark:text-slate-400">{t("invoice.vat")}</dt><dd className="font-medium text-slate-900 dark:text-white">{formatMoney(totals.vatTotal, currency)}</dd></div>
-              <div className="flex justify-between gap-4 border-t border-slate-200 pt-2 text-base font-bold dark:border-slate-800"><dt>{t("invoice.total")}</dt><dd className="text-brand-600 dark:text-brand-400">{formatMoney(totals.total, currency)}</dd></div>
+              <div className="flex justify-between gap-4"><dt className="text-ink-500 dark:text-ink-400">{t("invoice.subtotal")}</dt><dd className="font-medium text-ink-900 dark:text-white">{formatMoney(totals.subtotal, currency)}</dd></div>
+              {totals.discountTotal > 0 && <div className="flex justify-between gap-4"><dt className="text-ink-500 dark:text-ink-400">{t("invoice.discount")}</dt><dd className="font-medium text-rose-500">-{formatMoney(totals.discountTotal, currency)}</dd></div>}
+              <div className="flex justify-between gap-4"><dt className="text-ink-500 dark:text-ink-400">{t("invoice.vat")}</dt><dd className="font-medium text-ink-900 dark:text-white">{formatMoney(totals.vatTotal, currency)}</dd></div>
+              <div className="flex justify-between gap-4 border-t border-ink-200 pt-2 text-base font-bold dark:border-ink-800"><dt>{t("invoice.total")}</dt><dd className="text-brand-600 dark:text-brand-400">{formatMoney(totals.total, currency)}</dd></div>
             </dl>
 
             {reviewIssues.length > 0 && (
-              <div className="mt-5 space-y-1.5 rounded-xl bg-slate-50 p-3 dark:bg-slate-800/50">
-                <p className="flex items-center gap-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400"><Sparkles className="h-3.5 w-3.5" /> AI check</p>
+              <div className="mt-5 space-y-1.5 rounded-xl bg-ink-50 p-3 dark:bg-ink-800/50">
+                <p className="flex items-center gap-1.5 text-xs font-semibold text-ink-500 dark:text-ink-400"><Sparkles className="h-3.5 w-3.5" /> AI check</p>
                 {reviewIssues.map((issue, i) => (
                   <p key={i} className={`flex items-start gap-1.5 text-xs ${issue.level === "error" ? "text-rose-600 dark:text-rose-400" : issue.level === "warning" ? "text-amber-600 dark:text-amber-400" : "text-emerald-600 dark:text-emerald-400"}`}>
                     {issue.level === "error" ? <AlertTriangle className="mt-0.5 h-3 w-3 shrink-0" /> : issue.level === "warning" ? <AlertTriangle className="mt-0.5 h-3 w-3 shrink-0" /> : <CheckCircle2 className="mt-0.5 h-3 w-3 shrink-0" />}
@@ -428,14 +428,14 @@ export default function InvoiceEditorPage() {
       </div>
 
       {/* Mobile sticky action bar */}
-      <div className="fixed inset-x-0 bottom-0 z-20 border-t border-slate-200 bg-white/95 px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-4px_24px_rgba(15,23,42,0.08)] backdrop-blur-sm lg:hidden dark:border-slate-800 dark:bg-slate-900/95">
+      <div className="fixed inset-x-0 bottom-0 z-20 border-t border-ink-200 bg-white/95 px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-4px_24px_rgba(15,23,42,0.08)] backdrop-blur-sm lg:hidden dark:border-ink-800 dark:bg-ink-900/95">
         <div className="mb-2 flex items-center justify-between gap-3">
           <div className="min-w-0">
-            <p className="text-xs text-slate-500 dark:text-slate-400">{t("invoice.totalDue")}</p>
+            <p className="text-xs text-ink-500 dark:text-ink-400">{t("invoice.totalDue")}</p>
             <p className="truncate text-lg font-bold text-brand-600 dark:text-brand-400">{formatMoney(totals.total, currency)}</p>
           </div>
           {totals.discountTotal > 0 && (
-            <p className="shrink-0 text-xs text-slate-400">{t("invoice.inclVat", { amount: formatMoney(totals.vatTotal, currency) })}</p>
+            <p className="shrink-0 text-xs text-ink-400">{t("invoice.inclVat", { amount: formatMoney(totals.vatTotal, currency) })}</p>
           )}
         </div>
         <div className="grid grid-cols-2 gap-2">

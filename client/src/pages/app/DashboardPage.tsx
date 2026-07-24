@@ -41,10 +41,10 @@ function StatCard({ icon, label, value, accent }: { icon: React.ReactNode; label
   return (
     <div className="card p-4 sm:p-5">
       <div className="flex items-center justify-between gap-3">
-        <span className="text-sm font-medium text-slate-500 dark:text-slate-400">{label}</span>
+        <span className="text-sm font-medium text-ink-500 dark:text-ink-400">{label}</span>
         <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${accent}`}>{icon}</span>
       </div>
-      <p className="mt-3 text-xl font-bold text-slate-900 sm:text-2xl dark:text-white">{value}</p>
+      <p className="mt-3 text-xl font-bold text-ink-900 sm:text-2xl dark:text-white">{value}</p>
     </div>
   );
 }
@@ -85,7 +85,7 @@ export default function DashboardPage() {
       {aiSummary && (
         <div className="mb-6 flex items-start gap-3 rounded-xl border border-brand-200/80 bg-brand-50/60 p-4 dark:border-brand-500/20 dark:bg-brand-500/5">
           <Sparkles className="mt-0.5 h-5 w-5 shrink-0 text-brand-500" />
-          <p className="text-sm text-slate-700 dark:text-slate-200">{aiSummary}</p>
+          <p className="text-sm text-ink-700 dark:text-ink-200">{aiSummary}</p>
         </div>
       )}
 
@@ -100,7 +100,7 @@ export default function DashboardPage() {
         {/* Revenue graph */}
         <div className="card p-4 sm:p-6 lg:col-span-2">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-            <h3 className="font-semibold text-slate-900 dark:text-white">{t("dashboard.revenueChart")}</h3>
+            <h3 className="font-semibold text-ink-900 dark:text-white">{t("dashboard.revenueChart")}</h3>
             <Link to="/app/analytics" className="flex items-center gap-1 text-sm font-medium text-brand-600 hover:underline dark:text-brand-400">
               {t("dashboard.analytics")} <ArrowUpRight className="h-3.5 w-3.5" />
             </Link>
@@ -128,19 +128,19 @@ export default function DashboardPage() {
 
         {/* Upcoming payments */}
         <div className="card p-4 sm:p-6">
-          <h3 className="mb-4 font-semibold text-slate-900 dark:text-white">{t("dashboard.upcoming")}</h3>
+          <h3 className="mb-4 font-semibold text-ink-900 dark:text-white">{t("dashboard.upcoming")}</h3>
           {data.upcoming.length === 0 ? (
-            <p className="text-sm text-slate-500 dark:text-slate-400">{t("dashboard.nothingDue")}</p>
+            <p className="text-sm text-ink-500 dark:text-ink-400">{t("dashboard.nothingDue")}</p>
           ) : (
             <ul className="space-y-3">
               {data.upcoming.map((inv) => (
                 <li key={inv.id}>
-                  <Link to={`/app/invoices/${inv.id}`} className="flex items-center justify-between gap-3 rounded-xl p-2 hover:bg-slate-50 dark:hover:bg-slate-800">
+                  <Link to={`/app/invoices/${inv.id}`} className="flex items-center justify-between gap-3 rounded-xl p-2 hover:bg-ink-50 dark:hover:bg-ink-800">
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-medium text-slate-800 dark:text-slate-100">{inv.customer?.name ?? inv.customerName}</p>
-                      <p className="text-xs text-slate-500 dark:text-slate-400">{t("dashboard.due", { date: formatDate(inv.dueDate, locale) })}</p>
+                      <p className="truncate text-sm font-medium text-ink-800 dark:text-ink-100">{inv.customer?.name ?? inv.customerName}</p>
+                      <p className="text-xs text-ink-500 dark:text-ink-400">{t("dashboard.due", { date: formatDate(inv.dueDate, locale) })}</p>
                     </div>
-                    <span className="shrink-0 text-sm font-semibold text-slate-900 dark:text-white">{formatMoney(inv.total, inv.currency)}</span>
+                    <span className="shrink-0 text-sm font-semibold text-ink-900 dark:text-white">{formatMoney(inv.total, inv.currency)}</span>
                   </Link>
                 </li>
               ))}
@@ -151,25 +151,25 @@ export default function DashboardPage() {
 
       {/* Recent activity */}
       <div className="card mt-6 overflow-hidden">
-        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 p-4 sm:p-5 dark:border-slate-800">
-          <h3 className="font-semibold text-slate-900 dark:text-white">{t("dashboard.recentActivity")}</h3>
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-ink-200 p-4 sm:p-5 dark:border-ink-800">
+          <h3 className="font-semibold text-ink-900 dark:text-white">{t("dashboard.recentActivity")}</h3>
           <Link to="/app/invoices" className="text-sm font-medium text-brand-600 hover:underline dark:text-brand-400">{t("dashboard.viewAll")}</Link>
         </div>
         {data.recentInvoices.length === 0 ? (
-          <p className="p-8 text-center text-sm text-slate-500 dark:text-slate-400">{t("dashboard.noInvoices")}</p>
+          <p className="p-8 text-center text-sm text-ink-500 dark:text-ink-400">{t("dashboard.noInvoices")}</p>
         ) : (
-          <div className="divide-y divide-slate-100 dark:divide-slate-800">
+          <div className="divide-y divide-ink-100 dark:divide-ink-800">
             {data.recentInvoices.map((inv) => (
-              <Link key={inv.id} to={`/app/invoices/${inv.id}`} className="flex flex-col gap-2 p-4 hover:bg-slate-50 sm:flex-row sm:items-center sm:justify-between dark:hover:bg-slate-800/50">
+              <Link key={inv.id} to={`/app/invoices/${inv.id}`} className="flex flex-col gap-2 p-4 hover:bg-ink-50 sm:flex-row sm:items-center sm:justify-between dark:hover:bg-ink-800/50">
                 <div className="flex min-w-0 items-center gap-3">
                   {inv.createdByAi && <Sparkles className="h-4 w-4 shrink-0 text-brand-500" />}
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-medium text-slate-800 dark:text-slate-100">{inv.number}</p>
-                    <p className="truncate text-xs text-slate-500 dark:text-slate-400">{inv.customer?.name ?? inv.customerName ?? "—"}</p>
+                    <p className="truncate text-sm font-medium text-ink-800 dark:text-ink-100">{inv.number}</p>
+                    <p className="truncate text-xs text-ink-500 dark:text-ink-400">{inv.customer?.name ?? inv.customerName ?? "—"}</p>
                   </div>
                 </div>
                 <div className="flex items-center justify-between gap-4 sm:justify-end">
-                  <span className="text-sm font-semibold text-slate-900 dark:text-white">{formatMoney(inv.total, inv.currency)}</span>
+                  <span className="text-sm font-semibold text-ink-900 dark:text-white">{formatMoney(inv.total, inv.currency)}</span>
                   <StatusBadge status={inv.status} />
                 </div>
               </Link>

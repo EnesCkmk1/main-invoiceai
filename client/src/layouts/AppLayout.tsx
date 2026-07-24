@@ -71,7 +71,7 @@ export function AppLayout() {
               `flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition ${
                 isActive
                   ? "bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-300"
-                  : "text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
+                  : "text-ink-600 hover:bg-ink-100 dark:text-ink-400 dark:hover:bg-ink-800"
               }`
             }
           >
@@ -85,16 +85,16 @@ export function AppLayout() {
           <Sparkles className="h-4 w-4" /> {t("nav.newInvoice")}
         </NavLink>
       </div>
-      <div className="border-t border-slate-200 p-3 dark:border-slate-800">
+      <div className="border-t border-ink-200 p-3 dark:border-ink-800">
         <div className="flex items-center gap-3 rounded-xl px-2 py-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-600 text-sm font-bold text-white">
             {user ? initials(user.name) : "?"}
           </div>
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-semibold text-slate-800 dark:text-slate-100">{user?.name}</p>
-            <p className="truncate text-xs text-slate-500 dark:text-slate-400">{company?.name}</p>
+            <p className="truncate text-sm font-semibold text-ink-800 dark:text-ink-100">{user?.name}</p>
+            <p className="truncate text-xs text-ink-500 dark:text-ink-400">{company?.name}</p>
           </div>
-          <button onClick={logout} className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-rose-500 dark:hover:bg-slate-800" aria-label={t("nav.logout")}>
+          <button onClick={logout} className="rounded-lg p-1.5 text-ink-400 hover:bg-ink-100 hover:text-rose-500 dark:hover:bg-ink-800" aria-label={t("nav.logout")}>
             <LogOut className="h-4 w-4" />
           </button>
         </div>
@@ -103,26 +103,26 @@ export function AppLayout() {
   );
 
   return (
-    <div className="flex min-h-screen bg-slate-50 dark:bg-slate-950">
-      <aside className="hidden w-64 shrink-0 flex-col border-r border-slate-200 bg-white lg:flex dark:border-slate-800 dark:bg-slate-900">
+    <div className="flex min-h-screen bg-ink-50 dark:bg-ink-950">
+      <aside className="hidden w-64 shrink-0 flex-col border-r border-ink-200 bg-white lg:flex dark:border-ink-800 dark:bg-ink-900">
         <SidebarContent />
       </aside>
 
       {mobileOpen && (
         <div className="fixed inset-0 z-40 lg:hidden">
-          <div className="absolute inset-0 bg-slate-900/40" onClick={() => setMobileOpen(false)} />
-          <aside className="absolute left-0 top-0 flex h-full w-64 flex-col border-r border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+          <div className="absolute inset-0 bg-ink-900/40" onClick={() => setMobileOpen(false)} />
+          <aside className="absolute left-0 top-0 flex h-full w-64 flex-col border-r border-ink-200 bg-white dark:border-ink-800 dark:bg-ink-900">
             <SidebarContent />
           </aside>
         </div>
       )}
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-30 flex h-16 items-center justify-between gap-3 border-b border-slate-200 bg-white/80 px-4 backdrop-blur-sm lg:px-8 dark:border-slate-800 dark:bg-slate-900/80">
+        <header className="sticky top-0 z-30 flex h-16 items-center justify-between gap-3 border-b border-ink-200 bg-white/80 px-4 backdrop-blur-sm lg:px-8 dark:border-ink-800 dark:bg-ink-900/80">
           <button className="btn-ghost h-9 w-9 px-0! lg:hidden" onClick={() => setMobileOpen(true)}>
             <Menu className="h-5 w-5" />
           </button>
-          <div className="hidden items-center gap-2 rounded-lg border border-slate-200 px-2 py-1 text-xs text-slate-400 lg:flex dark:border-slate-800">
+          <div className="hidden items-center gap-2 rounded-lg border border-ink-200 px-2 py-1 text-xs text-ink-400 lg:flex dark:border-ink-800">
             {t("nav.pressN", { key: "N" })}
           </div>
           <div className="flex flex-1 items-center justify-end gap-2">
@@ -150,8 +150,8 @@ export function AppLayout() {
             ["?", t("nav.shortcutHelp")],
           ].map(([key, label]) => (
             <div key={key} className="flex items-center justify-between">
-              <span className="text-slate-600 dark:text-slate-300">{label}</span>
-              <kbd className="rounded-sm bg-slate-100 px-2 py-1 font-mono text-xs dark:bg-slate-800">{key}</kbd>
+              <span className="text-ink-600 dark:text-ink-300">{label}</span>
+              <kbd className="rounded-sm bg-ink-100 px-2 py-1 font-mono text-xs dark:bg-ink-800">{key}</kbd>
             </div>
           ))}
         </div>

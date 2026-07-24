@@ -77,7 +77,7 @@ export default function SettingsPage() {
               key={item.id}
               onClick={() => setTab(item.id)}
               className={`flex shrink-0 items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium transition ${
-                tab === item.id ? "bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-300" : "text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
+                tab === item.id ? "bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-300" : "text-ink-600 hover:bg-ink-100 dark:text-ink-400 dark:hover:bg-ink-800"
               }`}
             >
               {item.icon} {item.label}
@@ -106,13 +106,13 @@ export default function SettingsPage() {
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Field label={t("settings.brandColor")}>
                     <div className="flex items-center gap-2">
-                      <input type="color" className="h-10 w-14 rounded-lg border border-slate-200 dark:border-slate-700" value={company.brandColor} onChange={(e) => update({ brandColor: e.target.value })} />
+                      <input type="color" className="h-10 w-14 rounded-lg border border-ink-200 dark:border-ink-700" value={company.brandColor} onChange={(e) => update({ brandColor: e.target.value })} />
                       <input className="input" value={company.brandColor} onChange={(e) => update({ brandColor: e.target.value })} />
                     </div>
                   </Field>
                   <Field label={t("settings.accentColor")}>
                     <div className="flex items-center gap-2">
-                      <input type="color" className="h-10 w-14 rounded-lg border border-slate-200 dark:border-slate-700" value={company.accentColor} onChange={(e) => update({ accentColor: e.target.value })} />
+                      <input type="color" className="h-10 w-14 rounded-lg border border-ink-200 dark:border-ink-700" value={company.accentColor} onChange={(e) => update({ accentColor: e.target.value })} />
                       <input className="input" value={company.accentColor} onChange={(e) => update({ accentColor: e.target.value })} />
                     </div>
                   </Field>
@@ -153,7 +153,7 @@ export default function SettingsPage() {
 
             {tab === "templates" && (
               <div className="space-y-5">
-                <p className="text-sm text-slate-500 dark:text-slate-400">{t("settings.templateHint")}</p>
+                <p className="text-sm text-ink-500 dark:text-ink-400">{t("settings.templateHint")}</p>
                 <Field label={t("settings.emailSubject")}><input className="input" value={company.emailSubjectTemplate ?? ""} onChange={(e) => update({ emailSubjectTemplate: e.target.value })} placeholder={t("settings.emailSubjectPlaceholder")} /></Field>
                 <Field label={t("settings.emailBody")}><textarea className="input min-h-[160px] font-mono text-xs" value={company.emailBodyTemplate ?? ""} onChange={(e) => update({ emailBodyTemplate: e.target.value })} placeholder={t("settings.emailBodyPlaceholder")} /></Field>
               </div>
@@ -165,19 +165,19 @@ export default function SettingsPage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-semibold uppercase tracking-wide text-brand-600 dark:text-brand-400">{t("landing.proName")}</p>
-                      <p className="mt-1 text-3xl font-extrabold text-slate-900 dark:text-white">99 <span className="text-base font-medium text-slate-500">{t("landing.perMonth")}</span></p>
+                      <p className="mt-1 text-3xl font-extrabold text-ink-900 dark:text-white">99 <span className="text-base font-medium text-ink-500">{t("landing.perMonth")}</span></p>
                     </div>
                     <span className={`badge ${billing.active ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300" : "bg-amber-100 text-amber-700"}`}>
                       {billing.status}
                     </span>
                   </div>
                   {billing.trialEndsAt && billing.status === "trialing" && (
-                    <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">{t("settings.trialEnds", { date: new Date(billing.trialEndsAt).toLocaleDateString(locale === "da" ? "da-DK" : "en-GB") })}</p>
+                    <p className="mt-3 text-sm text-ink-600 dark:text-ink-300">{t("settings.trialEnds", { date: new Date(billing.trialEndsAt).toLocaleDateString(locale === "da" ? "da-DK" : "en-GB") })}</p>
                   )}
                   <button className="btn-primary mt-5" onClick={startCheckout}>
                     <CreditCard className="h-4 w-4" /> {billing.status === "active" ? t("settings.manageSub") : t("settings.subscribe")}
                   </button>
-                  {!billing.billingEnabled && <p className="mt-3 text-xs text-slate-400">{t("settings.stripeHint")}</p>}
+                  {!billing.billingEnabled && <p className="mt-3 text-xs text-ink-400">{t("settings.stripeHint")}</p>}
                 </div>
               </div>
             )}

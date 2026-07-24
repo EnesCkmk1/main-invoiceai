@@ -35,7 +35,7 @@ export default function MagicLinkPage() {
           {error}
         </div>
       ) : (
-        <div className="flex items-center gap-3 text-slate-500 dark:text-slate-400">
+        <div className="flex items-center gap-3 text-ink-500 dark:text-ink-400">
           <Spinner className="h-5 w-5 text-brand-600" /> Verifying…
         </div>
       )}

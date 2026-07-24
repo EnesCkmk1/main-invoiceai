@@ -19,8 +19,8 @@ export function AuthShell({ title, subtitle, children }: { title: string; subtit
         </div>
         <div className="flex flex-1 items-center justify-center py-10">
           <div className="w-full max-w-sm animate-fade-in">
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-white">{title}</h1>
-            <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">{subtitle}</p>
+            <h1 className="text-2xl font-bold text-ink-900 dark:text-white">{title}</h1>
+            <p className="mt-2 text-sm text-ink-500 dark:text-ink-400">{subtitle}</p>
             <div className="mt-8">{children}</div>
           </div>
         </div>
@@ -71,7 +71,7 @@ export function GoogleButton({ onClick }: { onClick?: () => void }) {
 
 export function AuthFooterLink({ text, linkText, to }: { text: string; linkText: string; to: string }) {
   return (
-    <p className="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
+    <p className="mt-6 text-center text-sm text-ink-500 dark:text-ink-400">
       {text}{" "}
       <Link to={to} className="font-semibold text-brand-600 hover:text-brand-700 dark:text-brand-400">
         {linkText}
