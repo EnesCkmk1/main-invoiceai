@@ -9,6 +9,17 @@ assistant that turns a single sentence into a complete, editable draft.
 
 [Live demo](https://invoiceflow-ai-eosin.vercel.app) · [Highlights](#highlights) · [Tech stack](#tech-stack) · [Getting started](#getting-started) · [Configuration](#configuration)
 
+<p>
+  <img alt="React 19" src="https://img.shields.io/badge/React-19-61DAFB?style=flat&logo=react&logoColor=white">
+  <img alt="TypeScript 7" src="https://img.shields.io/badge/TypeScript-7-3178C6?style=flat&logo=typescript&logoColor=white">
+  <img alt="Vite 8" src="https://img.shields.io/badge/Vite-8-646CFF?style=flat&logo=vite&logoColor=white">
+  <img alt="Tailwind CSS 4" src="https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat&logo=tailwindcss&logoColor=white">
+  <img alt="Express 5" src="https://img.shields.io/badge/Express-5-000000?style=flat&logo=express&logoColor=white">
+  <img alt="Prisma 7" src="https://img.shields.io/badge/Prisma-7-2D3748?style=flat&logo=prisma&logoColor=white">
+  <img alt="PostgreSQL 16" src="https://img.shields.io/badge/PostgreSQL-16-4169E1?style=flat&logo=postgresql&logoColor=white">
+  <img alt="Stripe" src="https://img.shields.io/badge/Stripe-Payments-635BFF?style=flat&logo=stripe&logoColor=white">
+</p>
+
 </div>
 
 ---
