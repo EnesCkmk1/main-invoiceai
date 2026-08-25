@@ -169,5 +169,4 @@ launch), and magic-link sign-in auto-creates accounts by design.
 
 ## License
 
-No license file is included, so all rights are reserved by default. Add a
-`LICENSE` file if you want to allow reuse.
+Released under the [MIT License](LICENSE).
