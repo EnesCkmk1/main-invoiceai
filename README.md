@@ -1,81 +1,104 @@
+<div align="center">
+
 # InvoiceFlow AI
 
-**The fastest way to send a professional invoice.** Create and send a beautiful,
-branded invoice in under 30 seconds — with an AI assistant that turns one sentence
-into a complete invoice.
+**The fastest way to send a professional invoice.**
 
-> **Not an accounting program — just invoicing.** No bookkeeping, no VAT filing,
-> no bank reconciliation. Just create, send and get paid. For freelancers,
-> consultants, tradespeople, agencies and small businesses. **99 DKK/month.**
+Create and send a beautiful, branded invoice in under 30 seconds — with an AI
+assistant that turns a single sentence into a complete, editable draft.
 
-Everything works **without AI** — the AI is an assistant that makes you dramatically
-faster, never a requirement.
+[Live demo](https://invoiceflow-ai-eosin.vercel.app) · [Highlights](#highlights) · [Tech stack](#tech-stack) · [Getting started](#getting-started) · [Configuration](#configuration)
 
-## 🚀 Live
-
-**Production:** [https://invoiceflow-ai-eosin.vercel.app](https://invoiceflow-ai-eosin.vercel.app)
-
-Demo login: `demo@invoiceflow.ai` / `password123`
-
-Hosted on Vercel (Express + Vite SPA, same origin) with Neon Postgres.
+</div>
 
 ---
 
-## ✨ Highlights
+> **Invoicing, not accounting.** No bookkeeping, no VAT filing, no bank
+> reconciliation — just create, send and get paid. Built for freelancers,
+> consultants, tradespeople, agencies and small businesses.
 
-- **AI invoice creation** — _"Invoice Anders Hansen for 12 hours of web development
-  at 750 DKK/hour with 25% VAT and 14-day payment terms."_ → a complete, editable draft.
-  Works offline with a deterministic rule-based engine; upgrades automatically when an
-  OpenAI key is present.
-- **Classic builder** — line items, VAT per line, discounts, multiple currencies,
-  recurring invoices, credit notes, duplicate.
-- **Beautiful PDFs** — logo, brand colors, QR payment code, bank details, print-optimised.
-- **Send & track** — email invoices with the PDF attached; track sent / opened /
-  downloaded / paid; automatic reminders.
-- **Online payments** — public payment page with Stripe Checkout (card, Apple Pay,
-  Google Pay); bank transfer details included.
-- **Dashboard & analytics** — revenue, outstanding, payment speed, best customers,
-  overdue, monthly growth.
+Everything works **without AI**. The AI is an assistant that makes you
+dramatically faster — never a requirement. When no OpenAI key is present, a
+deterministic rule-based engine handles the same natural-language prompts
+offline.
+
+## Live demo
+
+**[invoiceflow-ai-eosin.vercel.app](https://invoiceflow-ai-eosin.vercel.app)**
+
+```
+Email:    demo@invoiceflow.ai
+Password: password123
+```
+
+> Shared public demo account — please don't store anything sensitive in it.
+
+Hosted on Vercel (Express API + Vite SPA served from the same origin) with
+Neon Postgres.
+
+## Highlights
+
+- **AI invoice creation** — _"Invoice Anders Hansen for 12 hours of web
+  development at 750 DKK/hour with 25% VAT and 14-day terms"_ → a complete,
+  editable draft. Runs offline via a rule-based parser; upgrades automatically
+  when an OpenAI key is configured.
+- **Classic builder** — line items, per-line VAT, discounts, multiple
+  currencies, recurring invoices, credit notes, duplicate.
+- **Beautiful PDFs** — logo, brand colours, QR payment code, bank details,
+  print-optimised.
+- **Send & track** — email invoices with the PDF attached; track sent / opened
+  / downloaded / paid; automatic reminders.
+- **Online payments** — public payment page with Stripe Checkout (card, Apple
+  Pay, Google Pay); bank-transfer details included.
+- **Dashboard & analytics** — revenue, outstanding, payment speed, best
+  customers, overdue, monthly growth.
 - **Premium UX** — Stripe/Linear/Notion/Apple-inspired UI, dark mode, keyboard
-  shortcuts, subtle animations, mobile responsive.
-- **Auth** — email/password, magic link, Google login, forgot/reset password (JWT).
+  shortcuts, subtle animations, fully responsive.
+- **Auth** — email/password, magic link, Google login, forgot/reset password
+  (JWT).
 
-## 🧱 Tech stack
+## Tech stack
 
-| Layer     | Tech                                                          |
-| --------- | ------------------------------------------------------------ |
-| Frontend  | React 19, TypeScript, Vite, Tailwind CSS, Recharts, Framer Motion |
-| Backend   | Express, TypeScript, Prisma ORM, JWT                         |
-| Database  | PostgreSQL                                                   |
-| PDF       | PDFKit + QRCode                                              |
-| Email     | Nodemailer (SMTP)                                            |
-| Payments  | Stripe (invoice payments + subscription billing)            |
-| AI        | Rule-based parser (default) + optional OpenAI                |
+| Layer    | Tech                                                              |
+| -------- | ---------------------------------------------------------------- |
+| Frontend | React 19, TypeScript, Vite, Tailwind CSS, Recharts, Framer Motion |
+| Backend  | Express 5, TypeScript, Prisma ORM, Zod, JWT                      |
+| Database | PostgreSQL (Neon in production)                                  |
+| PDF      | PDFKit + QRCode                                                  |
+| Email    | Nodemailer (SMTP)                                                |
+| Payments | Stripe — invoice payments + subscription billing                |
+| AI       | Rule-based parser (default) + optional OpenAI                    |
 
-## 📁 Structure
+## Project structure
 
 ```
 .
-├── server/   # Express + Prisma API
-│   ├── prisma/schema.prisma   # data model
-│   ├── prisma/seed.ts         # demo data
-│   └── src/                   # routes, services (ai, pdf, invoice), middleware
-└── client/   # React 19 + Vite SPA
+├── server/                     # Express + Prisma API
+│   ├── prisma/schema.prisma    # data model
+│   ├── prisma/seed.ts          # demo data
+│   └── src/
+│       ├── routes/             # auth, invoices, customers, billing, ai, …
+│       ├── services/           # ai parser, pdf, invoice calc
+│       ├── middleware/         # auth
+│       └── lib/                # prisma, stripe, mailer, jwt, http
+└── client/                     # React 19 + Vite SPA
     └── src/
-        ├── pages/             # landing, auth, app (dashboard, invoices, ...)
-        ├── components/        # UI kit
-        └── lib/               # api client, auth, theme, types
+        ├── pages/              # landing, auth, app (dashboard, invoices, …)
+        ├── components/         # UI kit
+        └── lib/                # api client, auth, theme, types
 ```
 
-## 🚀 Getting started
+## Getting started
+
+**Prerequisites:** Node 22.x and Docker (or any local PostgreSQL).
 
 ### 1. Start PostgreSQL
 
 ```bash
-docker compose up -d          # starts Postgres on localhost:5432
+docker compose up -d          # Postgres on localhost:5432
 ```
 
-(Or use any local Postgres and update `DATABASE_URL`.)
+Or point `DATABASE_URL` at any existing Postgres instance.
 
 ### 2. Backend
 
@@ -93,56 +116,58 @@ npm run dev                   # http://localhost:4000
 ```bash
 cd client
 npm install
-npm run dev                   # http://localhost:5173 (proxies /api to :4000)
+npm run dev                   # http://localhost:5173 (proxies /api → :4000)
 ```
 
-### Demo login
+After seeding, sign in with **`demo@invoiceflow.ai`** / **`password123`**.
 
-After seeding: **`demo@invoiceflow.ai`** / **`password123`**
+## Configuration
 
-## 🔧 Configuration
+All backend config lives in `server/.env` (see
+[`.env.example`](server/.env.example)). Only `DATABASE_URL` and `JWT_SECRET`
+are required — everything else is optional and the app degrades gracefully.
 
-All backend config is via `server/.env` (see `.env.example`). Everything optional
-except `DATABASE_URL` and `JWT_SECRET`:
+| Variable                                                     | Purpose                                                                    |
+| ------------------------------------------------------------ | -------------------------------------------------------------------------- |
+| `DATABASE_URL` **(required)**                                | PostgreSQL connection string                                               |
+| `JWT_SECRET` **(required)**                                  | Signing key — must be ≥ 32 random chars in production                       |
+| `SMTP_*`                                                     | Deliver real emails; otherwise messages are logged to the console          |
+| `STRIPE_SECRET_KEY`, `STRIPE_PRICE_ID`, `STRIPE_WEBHOOK_SECRET` | Enable online payments + subscription billing; a demo flow is used without |
+| `GOOGLE_CLIENT_ID`                                           | Enable Google sign-in                                                      |
+| `OPENAI_API_KEY`, `OPENAI_MODEL`                             | Layer an LLM on top of the built-in parser (not required)                  |
 
-- **Email** — set `SMTP_*` to actually deliver emails; otherwise messages are logged
-  to the console (dev-friendly).
-- **Stripe** — set `STRIPE_SECRET_KEY`, `STRIPE_PRICE_ID`, `STRIPE_WEBHOOK_SECRET`
-  to enable online invoice payments and the 99 DKK/month subscription. Without them
-  a demo "simulate payment" flow is used.
-- **Google login** — set `GOOGLE_CLIENT_ID`.
-- **AI** — set `OPENAI_API_KEY` to layer an LLM on top of the built-in parser. Not
-  required; the app is fully functional without it.
+## Scripts
 
-## 🧪 Scripts
+**Backend** (`server/`): `dev`, `build`, `start`, `typecheck`,
+`prisma:migrate`, `prisma:deploy`, `db:seed`
+**Frontend** (`client/`): `dev`, `build`, `preview`, `typecheck`
 
-Backend (`server/`): `dev`, `build`, `start`, `typecheck`, `prisma:migrate`,
-`prisma:deploy`, `db:seed`.
-Frontend (`client/`): `dev`, `build`, `preview`, `typecheck`.
+CI (GitHub Actions) type-checks and builds both packages and fails the build on
+any new high/critical npm advisory.
 
-## 🔐 Security
+## Security
 
-- **Dependencies:** all runtime packages are CVE-free (verified against the npm
-  advisory DB and OSV.dev) with permissive licenses only (MIT/ISC/BSD/Apache-2.0).
-  CI fails the build on any new high/critical advisory.
-- **Headers & limits:** `helmet` security headers, JSON body capped at 1 MB,
+- **Dependencies** — runtime packages verified CVE-free against the npm advisory
+  DB and OSV.dev, permissive licenses only (MIT/ISC/BSD/Apache-2.0); CI blocks
+  new high/critical advisories.
+- **Headers & limits** — `helmet` security headers, JSON body capped at 1 MB,
   `x-powered-by` disabled.
-- **Rate limiting:** global API limiter plus strict limits on login/register/
-  magic-link/reset (brute-force protection) and AI endpoints.
-- **Auth hardening:** production refuses to boot without a strong `JWT_SECRET`;
-  magic-link and password-reset tokens are stored **hashed (SHA-256)** and are
-  single-use with short expiry; passwords are bcrypt-hashed (length-capped at
-  bcrypt's 72-byte input limit); Google login is disabled unless a
-  `GOOGLE_CLIENT_ID` is configured (token audience is always verified).
-- **Payments:** the demo "simulate payment" endpoint is hard-disabled in
+- **Rate limiting** — global API limiter plus strict limits on
+  login/register/magic-link/reset (brute-force protection) and AI endpoints.
+- **Auth hardening** — production refuses to boot without a strong `JWT_SECRET`;
+  magic-link and reset tokens are stored **hashed (SHA-256)**, single-use, with
+  short expiry; passwords are bcrypt-hashed; Google login is disabled unless a
+  `GOOGLE_CLIENT_ID` is set (token audience always verified).
+- **Payments** — the demo "simulate payment" endpoint is hard-disabled in
   production; Stripe webhooks are signature-verified against the raw body.
-- **Enumeration:** forgot-password always responds identically; login errors
-  don't reveal whether the email exists.
+- **Enumeration** — forgot-password always responds identically; login errors
+  never reveal whether an email exists.
 
-Known trade-offs (documented deliberately): the JWT is kept in `localStorage`
-(simple, but relies on XSS protection — consider httpOnly cookies + CSRF tokens
-before launch), and magic-link sign-in auto-creates accounts by design.
+**Documented trade-offs:** the JWT is kept in `localStorage` (simple, but relies
+on XSS protection — consider httpOnly cookies + CSRF tokens before a real
+launch), and magic-link sign-in auto-creates accounts by design.
 
-## 📌 Notes
+## License
 
-Deployment is intentionally not configured yet.
+No license file is included, so all rights are reserved by default. Add a
+`LICENSE` file if you want to allow reuse.
