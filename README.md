@@ -18,9 +18,32 @@ assistant that turns a single sentence into a complete, editable draft.
   <img alt="Prisma 7" src="https://img.shields.io/badge/Prisma-7-2D3748?style=flat&logo=prisma&logoColor=white">
   <img alt="PostgreSQL 16" src="https://img.shields.io/badge/PostgreSQL-16-4169E1?style=flat&logo=postgresql&logoColor=white">
   <img alt="Stripe" src="https://img.shields.io/badge/Stripe-Payments-635BFF?style=flat&logo=stripe&logoColor=white">
+  <a href="https://invoiceflow-ai-eosin.vercel.app"><img alt="Live Demo" src="https://img.shields.io/badge/Live-Demo-black?style=flat&logo=vercel&logoColor=white"></a>
 </p>
 
 </div>
+
+## Live demo
+
+<div align="center">
+
+[![Live Demo](https://img.shields.io/badge/Live-invoiceflow--ai--eosin.vercel.app-black?style=for-the-badge&logo=vercel)](https://invoiceflow-ai-eosin.vercel.app)
+
+[![InvoiceFlow AI demo](docs/invoiceflow-demo.gif)](https://invoiceflow-ai-eosin.vercel.app)
+
+[Full video (MP4)](docs/invoiceflow-demo.mp4)
+
+</div>
+
+```
+Email:    demo@invoiceflow.ai
+Password: password123
+```
+
+> Shared public demo account — please don't store anything sensitive in it.
+
+Hosted on Vercel (Express API + Vite SPA served from the same origin) with
+Neon Postgres.
 
 ---
 
@@ -32,20 +55,6 @@ Everything works **without AI**. The AI is an assistant that makes you
 dramatically faster — never a requirement. When no OpenAI key is present, a
 deterministic rule-based engine handles the same natural-language prompts
 offline.
-
-## Live demo
-
-**[invoiceflow-ai-eosin.vercel.app](https://invoiceflow-ai-eosin.vercel.app)**
-
-```
-Email:    demo@invoiceflow.ai
-Password: password123
-```
-
-> Shared public demo account — please don't store anything sensitive in it.
-
-Hosted on Vercel (Express API + Vite SPA served from the same origin) with
-Neon Postgres.
 
 ## Highlights
 
