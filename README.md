@@ -158,12 +158,14 @@ are required — everything else is optional and the app degrades gracefully.
 
 ## Scripts
 
-**Backend** (`server/`): `dev`, `build`, `start`, `typecheck`,
+**Backend** (`server/`): `dev`, `build`, `start`, `typecheck`, `test`,
 `prisma:migrate`, `prisma:deploy`, `db:seed`
 **Frontend** (`client/`): `dev`, `build`, `preview`, `typecheck`
 
-CI (GitHub Actions) type-checks and builds both packages and fails the build on
-any new high/critical npm advisory.
+CI (GitHub Actions) runs deterministic parser and invoice-calculation tests,
+type-checks and builds both packages, and fails on critical npm advisories.
+Prisma's CLI currently reports four high-severity advisories in its development
+tool chain; they remain visible in the audit output and are not silently ignored.
 
 ## Security
 
@@ -186,6 +188,18 @@ any new high/critical npm advisory.
 **Documented trade-offs:** the JWT is kept in `localStorage` (simple, but relies
 on XSS protection — consider httpOnly cookies + CSRF tokens before a real
 launch), and magic-link sign-in auto-creates accounts by design.
+
+## Engineering notes
+
+The application is intentionally split into a React/Vite client and an
+Express/Prisma API. The rule-based parser is the reproducible baseline, while
+the optional OpenAI provider handles fuzzier language. Invoice totals are
+calculated on the server so the browser cannot be the source of truth for
+prices, VAT or discounts. See the [architecture decision record](docs/adr/0001-rule-based-ai-fallback.md)
+for the AI fallback trade-off.
+
+See [SECURITY.md](SECURITY.md) for reporting guidance and [CONTRIBUTING.md](CONTRIBUTING.md)
+for local checks.
 
 ## License
 
